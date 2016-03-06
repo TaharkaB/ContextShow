@@ -1,0 +1,83 @@
+﻿<Page
+  x:Class="UWPOxfordFaceIdentification.MainPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="using:UWPOxfordFaceIdentification"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d">
+
+  <Grid
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <local:CameraDisplay
+      x:Name="cameraDisplay" />
+    <StackPanel
+      VerticalAlignment="Bottom"
+      HorizontalAlignment="Center"
+      Margin="0,0,0,20"
+      Orientation="Horizontal">
+      <Button
+        Margin="8"
+        Template="{x:Null}">
+        <Button.Flyout>
+          <Flyout>
+            <StackPanel Orientation="Horizontal">
+              <TextBox
+                Width="240"
+                x:Name="txtPersonName" />
+              <Button
+                Content="Submit"
+                Click="OnSubmitFaceForUser"/>
+            </StackPanel>
+          </Flyout>
+        </Button.Flyout>
+        <Grid
+          Width="80"
+          Height="80">
+          <Ellipse
+            Fill="Gray" />
+          <Viewbox
+            Margin="16">
+            <SymbolIcon
+              Symbol="AddFriend"
+              Foreground="White" />
+          </Viewbox>
+        </Grid>
+      </Button>
+
+      <Button
+        Margin="8"
+        Click="OnTrain"
+        Template="{x:Null}">
+        <Grid
+          Width="80"
+          Height="80">
+          <Ellipse
+            Fill="Gray" />
+          <Viewbox
+            Margin="16">
+            <SymbolIcon Foreground="White"
+              Symbol="Sync" />
+          </Viewbox>
+        </Grid>
+      </Button>
+      <Button
+        Margin="8"
+        Click="OnIdentifyUser"
+        Template="{x:Null}">
+        <Grid
+          Width="80"
+          Height="80">
+          <Ellipse
+            Fill="Gray" />
+          <Viewbox
+            Margin="4">
+            <TextBlock
+              Foreground="White"
+              Text="?" />
+          </Viewbox>
+        </Grid>
+      </Button>
+    </StackPanel>
+  </Grid>
+</Page>
