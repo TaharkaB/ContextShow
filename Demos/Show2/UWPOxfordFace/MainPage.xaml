@@ -13,16 +13,56 @@
       x:Name="cameraDisplay" />
     <StackPanel
       VerticalAlignment="Bottom"
-      HorizontalAlignment="Left">
+      HorizontalAlignment="Center"
+      Margin="0,0,0,20"
+      Orientation="Horizontal">
       <Button
-        Content="Take"
-        Click="OnTake" />
+        Margin="8"
+        Template="{x:Null}"
+        Click="OnTake">
+        <Grid
+          Width="80"
+          Height="80">
+          <Ellipse
+            Fill="Gray" />
+          <Viewbox
+            Margin="16">
+            <SymbolIcon
+              Symbol="Camera"
+              Foreground="White" />
+          </Viewbox>
+        </Grid>
+      </Button>
       <Button
-        Content="Face"
-        Click="OnFace" />
+        Margin="8"
+        Click="OnFace"
+        Template="{x:Null}">
+        <Grid
+          Width="80"
+          Height="80">
+          <Ellipse
+            Fill="Gray" />
+          <Viewbox
+            Margin="16">
+            <SymbolIcon
+              Symbol="WebCam"
+              Foreground="White" />
+          </Viewbox>
+        </Grid>
+      </Button>
       <Button
-        Content="Emotion"
-        Click="OnEmotion" />
+        Template="{x:Null}"
+        Margin="8"
+        Click="OnEmotion">
+        <Grid Width="80" Height="80">
+          <Ellipse
+            Fill="Gray" />
+          <Viewbox Margin="16">
+            <SymbolIcon
+              Foreground="White" />
+          </Viewbox>
+        </Grid>
+      </Button>
     </StackPanel>
   </Grid>
 </Page>
