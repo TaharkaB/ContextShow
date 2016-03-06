@@ -44,8 +44,8 @@
         Width="0"
         Height="0"
         Stroke="White"
-        StrokeDashArray="4 1"
-        StrokeThickness="3"
+        StrokeDashArray="1 2"
+        StrokeThickness="1"
         Visibility="Collapsed"
         RenderTransformOrigin="0.5,0.5">
         <Rectangle.RenderTransform>

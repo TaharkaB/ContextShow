@@ -290,7 +290,7 @@
 
       return (changed);
     }
-    static readonly int MIN_SIZE_DELTA = 10;
+    static readonly int MIN_SIZE_DELTA = 5;
     VideoFrame videoFrame;
     Func<SoftwareBitmap, Task> faceProcessor;
     MediaCapture mediaCapture;
