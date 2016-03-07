@@ -1,0 +1,98 @@
+﻿<UserControl
+  x:Class="WpfRealsenseFacialDetection.Controls.FaceControl"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  mc:Ignorable="d"
+  d:DesignHeight="300"
+  d:DesignWidth="300">
+  <Grid>
+    <Grid.Resources>
+      <Style
+        x:Key="txtStyle"
+        TargetType="TextBlock">
+        <Setter
+          Property="FontSize"
+          Value="18" />
+        <Setter
+          Property="FontSize"
+          Value="18" />
+        <Setter
+          Property="TextAlignment"
+          Value="Left" />
+        <Setter
+          Property="TextWrapping"
+          Value="Wrap" />
+        <Setter
+          Property="Foreground"
+          Value="White" />
+      </Style>
+    </Grid.Resources>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition
+        Width="*" />
+
+      <ColumnDefinition
+        Width="3*" />
+    </Grid.ColumnDefinitions>
+    <Canvas
+      x:Name="canvas"
+      Grid.ColumnSpan="2" />
+    <Grid
+      Background="Black"
+      Opacity="0.75"
+      Margin="8">
+      <Grid.RowDefinitions>
+        <RowDefinition
+          Height="Auto" />
+        <RowDefinition
+          Height="Auto" />
+        <RowDefinition
+          Height="Auto" />
+        <RowDefinition
+          Height="Auto" />
+        <RowDefinition
+          Height="Auto" />
+        <RowDefinition
+          Height="Auto" />
+      </Grid.RowDefinitions>
+      <TextBlock
+        Style="{StaticResource txtStyle}"
+        Text="definite expressions" />
+      <TextBlock
+        Text="possible expressions"
+        Style="{StaticResource txtStyle}"
+        Grid.Row="2" />
+      <TextBlock
+        Text="missing expressions"
+        Style="{StaticResource txtStyle}"
+        Grid.Row="4" />
+      <TextBlock
+        x:Name="txtExpressions"
+        Foreground="Lime"
+        Grid.Row="1"
+        Style="{StaticResource txtStyle}" />
+      <TextBlock
+        x:Name="txtPossibleExpressions"
+        Foreground="Silver"
+        Grid.Row="3"
+        Style="{StaticResource txtStyle}" />
+      <TextBlock
+        x:Name="txtMissingExpressions"
+        Grid.Row="5"
+        Foreground="Gray"
+        Style="{StaticResource txtStyle}" />
+
+    </Grid>
+    <TextBlock
+      Margin="8"
+      Grid.Column="1"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Top"
+      FontSize="36"
+      TextAlignment="Right"
+      Foreground="Orange"
+      x:Name="txtHeartRate" />
+  </Grid>
+</UserControl>
