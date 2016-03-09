@@ -1,0 +1,23 @@
+﻿<Page
+  x:Class="Win81KinectFacialDetection.MainPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="using:Win81KinectFacialDetection"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d"
+  xmlns:w2d="using:Microsoft.Graphics.Canvas.UI.Xaml">
+
+  <Grid
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <w2d:CanvasControl
+      Draw="OnDraw"
+      CreateResources="OnCreateResources" />
+    <local:Face
+      HorizontalAlignment="Left"
+      VerticalAlignment="Top"
+      x:Name="faceControl"
+      Width="300"
+      Margin="20" />
+  </Grid>
+</Page>
