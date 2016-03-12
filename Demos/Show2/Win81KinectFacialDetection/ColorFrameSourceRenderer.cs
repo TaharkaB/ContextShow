@@ -4,6 +4,7 @@
   using Microsoft.Graphics.Canvas.DirectX;
   using Microsoft.Graphics.Canvas.UI.Xaml;
   using System;
+  using Windows.Foundation;
   using WindowsPreview.Kinect;
 
   class ColorFrameSourceRenderer : IRenderKinectFrames
@@ -49,11 +50,14 @@
         }
       }
     }
-    public void Render(CanvasDrawingSession session, Face f)
+    public void Render(CanvasDrawingSession session, Face f, 
+      int width, int height)
     {
       if (this.canvasBitmap != null)
       {
-        session.DrawImage(this.canvasBitmap);
+        session.DrawImage(this.canvasBitmap,
+          new Rect(0, 0, width, height),
+          new Rect(0, 0, this.colorFrameDescription.Width, this.colorFrameDescription.Height));
       }
     }
     public void CreateResources(CanvasControl control)

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="792e9ea6-80c7-4071-be64-4e856d8e15b5" Publisher="CN=mtaulty" Version="1.0.0.0" />
+  <Identity Name="d12740fc-4771-41bf-9d7f-0562ee9a6892" Publisher="CN=mtaulty" Version="1.0.0.0" />
   <Properties>
-    <DisplayName>Win81KinectFacialDetection</DisplayName>
+    <DisplayName>Win81KinectHandTracking</DisplayName>
     <PublisherDisplayName>mtaulty</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -14,15 +14,15 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Win81KinectFacialDetection.App">
-      <m2:VisualElements DisplayName="Kinect Facial Detection" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Win81KinectFacialDetection" ForegroundText="light" BackgroundColor="#464646">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Win81KinectHandTracking.App">
+      <m2:VisualElements DisplayName="Kinect Hand Tracking" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Win81KinectHandTracking" ForegroundText="light" BackgroundColor="#464646">
         <m2:SplashScreen Image="Assets\SplashScreen.png" />
       </m2:VisualElements>
     </Application>
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
-    <DeviceCapability Name="microphone" />
     <DeviceCapability Name="webcam" />
+    <DeviceCapability Name="microphone" />
   </Capabilities>
 </Package>

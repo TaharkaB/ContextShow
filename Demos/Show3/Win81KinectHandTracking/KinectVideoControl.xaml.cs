@@ -1,4 +1,4 @@
-﻿namespace W81KinectRegionDrawing
+﻿namespace Win81KinectHandTracking
 {
   using Microsoft.Graphics.Canvas;
   using Microsoft.Graphics.Canvas.DirectX;
@@ -7,6 +7,7 @@
   using Windows.Foundation;
   using Windows.UI.Xaml.Controls;
   using WindowsPreview.Kinect;
+
   public sealed partial class KinectVideoControl : UserControl
   {
     public KinectVideoControl()
@@ -57,8 +58,7 @@
         }
       }
     }
-    public void Render(CanvasDrawingSession session, double width,
-      double height)
+    public void Render(CanvasDrawingSession session,int width, int height)
     {
       if (this.canvasBitmap != null)
       {
@@ -68,13 +68,13 @@
       }
     }
     void canvasControl_Draw(
-      CanvasControl sender,
+      CanvasControl sender, 
       CanvasDrawEventArgs args)
     {
       using (CanvasDrawingSession drawSession = args.DrawingSession)
       {
         this.Update(drawSession.Device);
-        this.Render(drawSession, sender.ActualWidth, sender.ActualHeight);
+        this.Render(drawSession, (int)sender.ActualWidth, (int)sender.ActualHeight);
       }
       sender.Invalidate();
     }

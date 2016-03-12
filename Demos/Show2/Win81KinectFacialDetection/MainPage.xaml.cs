@@ -42,7 +42,10 @@
         foreach (var renderer in this.renderList)
         {
           renderer.Update(sender.Device);
-          renderer.Render(drawSession, this.faceControl);
+          renderer.Render(
+            drawSession, 
+            this.faceControl,
+            (int)sender.ActualWidth, (int)sender.ActualHeight);
         }
       }
       sender.Invalidate();

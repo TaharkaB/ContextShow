@@ -9,6 +9,7 @@
     void Initialise(KinectSensor sensor);
     void CreateResources(CanvasControl canvasControl);
     void Update(ICanvasResourceCreator resourceCreator);
-    void Render(CanvasDrawingSession session, Face face);
+    void Render(CanvasDrawingSession session, Face face, int width,
+      int height);
   }
 }

@@ -5,6 +5,7 @@
   using Microsoft.Kinect.Face;
   using System.Linq;
   using System.Numerics;
+  using Windows.Foundation;
   using Windows.UI;
   using Windows.UI.Xaml;
   using WindowsPreview.Kinect;
@@ -57,7 +58,11 @@
         }
       }
     }
-    public void Render(CanvasDrawingSession session, Face f)
+    public void Render(
+      CanvasDrawingSession session, 
+      Face f,
+      int width, 
+      int height)
     {
       VisualStateManager.GoToState(f, "_default", false);
 
@@ -68,10 +73,14 @@
         if (this.currentFaceFrameResult.FaceFrameFeatures.HasFlag(
           FaceFrameFeatures.BoundingBoxInColorSpace))
         {
-          var faceBox =
+          var faceBoxInVideoSpace = 
             this.currentFaceFrameResult.FaceBoundingBoxInColorSpace.ToRect();
 
-          session.DrawRectangle(faceBox, Colors.Red, 3.0f);
+          var faceBoxInDrawSpace =
+            this.ScaleColorSpaceRectToDisplayRect(faceBoxInVideoSpace,
+              width, height);
+
+          session.DrawRectangle(faceBoxInDrawSpace, Colors.Red, 3.0f);
         }
         // If we are seeing the features of the face, draw them
         // these are eyes, nose, mouth.
@@ -83,8 +92,8 @@
           {
             session.FillCircle(
               new Vector2(
-                (float)faceFeature.X - DIAMETER / 2.0f, 
-                (float)faceFeature.Y - DIAMETER / 2.0f),
+                 (float)this.ScaleColorSpaceXToDisplayX(faceFeature.X, width)  - DIAMETER / 2.0f, 
+                 (float)this.ScaleColorSpaceYToDisplayY(faceFeature.Y, height) - DIAMETER / 2.0f),
               DIAMETER,
               Colors.Yellow);
           }
@@ -98,6 +107,29 @@
           }
         }
       }
+    }
+    Rect ScaleColorSpaceRectToDisplayRect(Rect colorSpaceRect,
+      int width, int height)
+    {
+      var colorHeight = this.sensor.ColorFrameSource.FrameDescription.Height;
+
+      Rect r = new Rect(
+        this.ScaleColorSpaceXToDisplayX(colorSpaceRect.Left, width),
+        this.ScaleColorSpaceYToDisplayY(colorSpaceRect.Top, height),
+        this.ScaleColorSpaceXToDisplayX(colorSpaceRect.Width, width),
+        this.ScaleColorSpaceYToDisplayY(colorSpaceRect.Height, height)
+      );
+      return (r);
+    }
+    double ScaleColorSpaceXToDisplayX(double colorSpaceX, int displayWidth)
+    {
+      var colorWidth = this.sensor.ColorFrameSource.FrameDescription.Width;
+      return ((colorSpaceX / colorWidth) * displayWidth);
+    }
+    double ScaleColorSpaceYToDisplayY(double colorSpaceY, int displayHeight)
+    {
+      var colorHeight = this.sensor.ColorFrameSource.FrameDescription.Height;
+      return ((colorSpaceY / colorHeight) * displayHeight);
     }
     void LostBody()
     {
