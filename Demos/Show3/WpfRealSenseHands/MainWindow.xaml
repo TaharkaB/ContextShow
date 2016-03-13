@@ -1,0 +1,41 @@
+﻿<Window
+  x:Class="WpfRealSenseHands.MainWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="clr-namespace:WpfRealSenseHands.Controls"
+  Title="MainWindow"
+  Height="600"
+  Width="800">
+  <Grid
+    x:Name="parentGrid">
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition
+        Height="Auto" />
+
+      <RowDefinition />
+
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition
+        Width="Auto" />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    
+    <controls:DepthVideoControl
+      Grid.RowSpan="3"
+      Grid.ColumnSpan="3" />
+    <controls:PaintControl2D
+      Grid.RowSpan="3"
+      Grid.ColumnSpan="3" />
+    <!--<controls:ColorVideoControl
+      Grid.RowSpan="3"
+      Grid.ColumnSpan="3"/>
+    <controls:HandDisplay3DControl
+      Background="Black"
+      Grid.ColumnSpan="3"
+      Grid.RowSpan="3"
+      Opacity="0.5" />-->
+  </Grid>
+</Window>

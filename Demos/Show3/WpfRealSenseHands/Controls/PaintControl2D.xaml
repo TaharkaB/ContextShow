@@ -1,0 +1,22 @@
+﻿<UserControl
+  x:Class="WpfRealSenseHands.Controls.PaintControl2D"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:WpfRealSenseHands.Controls"
+  mc:Ignorable="d"
+  d:DesignHeight="300"
+  d:DesignWidth="300">
+  <Grid>
+    <Canvas
+      x:Name="drawCanvas">
+      <Ellipse
+        Width="30"
+        Height="30"
+        Stroke="Black"
+        Fill="Red"
+        x:Name="leftEllipse" />
+    </Canvas>
+  </Grid>
+</UserControl>
