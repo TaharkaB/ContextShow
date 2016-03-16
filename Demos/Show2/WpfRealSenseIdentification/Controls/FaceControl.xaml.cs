@@ -41,6 +41,9 @@
         // We want face recognition.
         var recognitionConfig = config.QueryRecognition();
         recognitionConfig.Enable();
+
+        recognitionConfig.SetAccuracyThreshold(ACCURACY_THRESHOLD);
+
         recognitionConfig.SetRegistrationMode(
           RecognitionType.REGISTRATION_MODE_ON_DEMAND);
 
@@ -133,6 +136,7 @@
     PXCMFaceData faceData;
     PXCMFaceModule faceModule;
     PXCMSenseManager senseManager;
+    const int ACCURACY_THRESHOLD = 90;
 
     const string PERSISTED_FACE_DB = "faces.bin";
   }
