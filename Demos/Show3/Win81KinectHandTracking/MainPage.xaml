@@ -9,6 +9,8 @@
 
   <Grid>
     <local:KinectVideoControl />
+    <Rectangle
+      Fill="#88000000" />
     <Canvas
       x:Name="drawCanvas">
       <Ellipse
