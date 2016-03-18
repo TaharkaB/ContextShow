@@ -12,6 +12,7 @@
     public MainPage()
     {
       this.InitializeComponent();
+      this.brushManager = new BrushManager();
       this.Loaded += OnLoaded;
     }
     void OnLoaded(object sender, RoutedEventArgs args)
@@ -65,5 +66,36 @@
       this.canvas.Children.Add(control);
       this.inkCanvas.Visibility = Visibility.Collapsed;
     }
+    void OnRed(object sender, RoutedEventArgs e)
+    {
+      ((Button)sender).Opacity =
+        this.brushManager.ToggleRed() ? 1.0 : 0.5;
+
+      this.ChangeBrush();
+    }
+    void OnGreen(object sender, RoutedEventArgs e)
+    {
+      ((Button)sender).Opacity =
+        this.brushManager.ToggleGreen() ? 1.0 : 0.5;
+
+      this.ChangeBrush();
+    }
+    void OnBlue(object sender, RoutedEventArgs e)
+    {
+      ((Button)sender).Opacity =
+        this.brushManager.ToggleBlue() ? 1.0 : 0.5;
+
+      this.ChangeBrush();
+    }
+    void ChangeBrush()
+    {
+      var attr = 
+        this.inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
+
+      attr.Color = this.brushManager.Colour;
+
+      this.inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(attr);
+    }
+    BrushManager brushManager;
   }
 }
