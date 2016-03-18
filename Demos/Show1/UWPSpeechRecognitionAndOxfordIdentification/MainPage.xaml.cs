@@ -1,4 +1,4 @@
-﻿#define GRAMMAR
+﻿//#define GRAMMAR
 using System;
 
 #if GRAMMAR
@@ -73,7 +73,8 @@ namespace Demo2_RocketLaunch
         {
           var speechResult = await speechRecognizer.RecognizeAsync();
 
-          if (speechResult.Confidence != SpeechRecognitionConfidence.Rejected)
+          if ((speechResult.Confidence == SpeechRecognitionConfidence.Medium) ||
+            (speechResult.Confidence == SpeechRecognitionConfidence.High))
           {
             string spokenCommand = string.Empty;
 
