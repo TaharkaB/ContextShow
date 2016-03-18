@@ -1,0 +1,162 @@
+﻿<Page
+  x:Class="Win81PointersAndManipulation.MainPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="using:Win81PointersAndManipulation"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d"
+  xmlns:k="using:Microsoft.Kinect.Xaml.Controls">
+  <Grid
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <k:KinectRegion>
+      <!-- this content only changed in 1 way from previous example -->
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition
+            Width="4*" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition
+            Height="4*" />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+        <Image
+          x:Name="backdrop"
+          Stretch="UniformToFill"
+          Source="Assets/lined.png"
+          Grid.RowSpan="2"
+          Grid.ColumnSpan="2" />
+        <local:ManipulatableCanvas
+          Background="Transparent"
+          x:Name="drawCanvas"
+          Grid.RowSpan="2"
+          Grid.ColumnSpan="2" />
+        <Image
+          x:Name="imgInput"
+          HorizontalAlignment="Right"
+          VerticalAlignment="Bottom"
+          Stretch="Uniform"
+          Grid.Row="1"
+          Grid.Column="1" />
+
+        <StackPanel
+          HorizontalAlignment="Center"
+          VerticalAlignment="Top"
+          Grid.RowSpan="2"
+          Orientation="Horizontal"
+          Grid.ColumnSpan="2"
+          Margin="20,40,20,0">
+          <Button
+            Opacity="1.0"
+            Click="OnRed"
+            Template="{x:Null}"
+            Margin="20,0">
+            <Grid>
+              <Ellipse
+                Width="150"
+                Height="150"
+                Stroke="Black"
+                StrokeThickness="5"
+                Fill="Red" />
+              <TextBlock
+                VerticalAlignment="Center"
+                FontSize="36"
+                HorizontalAlignment="Center"
+                Text="Red"
+                Foreground="Black" />
+            </Grid>
+          </Button>
+          <Button
+            Opacity="0.5"
+            Click="OnGreen"
+            Template="{x:Null}"
+            Margin="20,0">
+            <Grid>
+              <Ellipse
+                Width="150"
+                Height="150"
+                Stroke="Black"
+                StrokeThickness="5"
+                Fill="Green" />
+              <TextBlock
+                VerticalAlignment="Center"
+                FontSize="36"
+                HorizontalAlignment="Center"
+                Text="Green"
+                Foreground="Black" />
+            </Grid>
+          </Button>
+          <Button
+            Opacity="0.5"
+            Click="OnBlue"
+            Template="{x:Null}"
+            Margin="20,0">
+            <Grid>
+              <Ellipse
+                Width="150"
+                Height="150"
+                Stroke="Black"
+                StrokeThickness="5"
+                Fill="Blue" />
+              <TextBlock
+                VerticalAlignment="Center"
+                FontSize="36"
+                HorizontalAlignment="Center"
+                Text="Blue"
+                Foreground="Black" />
+            </Grid>
+          </Button>
+          <Button
+            Template="{x:Null}"
+            Margin="20,0"
+            Click="OnAddPhoto">
+            <Grid>
+              <Ellipse
+                Width="150"
+                Height="150"
+                Stroke="Black"
+                StrokeThickness="5">
+                <Ellipse.Fill>
+                  <ImageBrush
+                    Stretch="Fill"
+                    ImageSource="Assets/landscape.jpg" />
+                </Ellipse.Fill>
+              </Ellipse>
+              <TextBlock
+                VerticalAlignment="Center"
+                FontSize="36"
+                HorizontalAlignment="Center"
+                Text="Photo"
+                Foreground="Black" />
+            </Grid>
+          </Button>
+          <Button
+            Click="OnClear"
+            Template="{x:Null}"
+            Margin="20,0">
+            <Grid>
+              <Ellipse
+                Width="150"
+                Height="150"
+                Stroke="Black"
+                StrokeThickness="5"
+                Fill="Transparent" />
+              <TextBlock
+                VerticalAlignment="Center"
+                FontSize="36"
+                HorizontalAlignment="Center"
+                Text="Clear"
+                Foreground="Black" />
+            </Grid>
+          </Button>
+        </StackPanel>
+
+      </Grid>
+    </k:KinectRegion>
+
+  </Grid>
+  
+</Page>
