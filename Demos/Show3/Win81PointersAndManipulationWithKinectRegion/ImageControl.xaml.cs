@@ -6,7 +6,7 @@
   using Windows.UI.Xaml.Controls;
   using Windows.UI.Xaml.Input;
   using WindowsPreview.Kinect.Input;
-
+  using Windows.UI.Xaml;
   public sealed partial class ImageControl : UserControl, IKinectControl
   {
     public ImageControl()
@@ -51,10 +51,14 @@
       KinectGestureRecognizer sender, 
       KinectManipulationUpdatedEventArgs args)
     {
+      // this is 'something of a hack' right now in terms of using this
+      // size here.
+      var size = Window.Current.Bounds;
+
       this.transform.ScaleX *= args.Delta.Scale;
       this.transform.ScaleY *= args.Delta.Scale;
-      this.transform.TranslateX += args.Delta.Translation.X * 1280;
-      this.transform.TranslateY += args.Delta.Translation.Y * 720;
+      this.transform.TranslateX += args.Delta.Translation.X * size.Width;
+      this.transform.TranslateY += args.Delta.Translation.Y * size.Height;
     }
     void OnManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
     {
