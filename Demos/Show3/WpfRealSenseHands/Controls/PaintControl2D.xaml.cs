@@ -1,33 +1,36 @@
-﻿using System;
-using System.Windows.Controls;
-using System.Linq;
-using System.Windows.Shapes;
-using System.Collections.Generic;
-using System.Windows.Media;
-
-namespace WpfRealSenseHands.Controls
+﻿namespace WpfRealSenseHands.Controls
 {
-  public partial class PaintControl2D : UserControl, IModuleProcessor
+  using System.Collections.Generic;
+  using System.Linq;
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Media;
+  using System.Windows.Shapes;
+  using JointPositionMap =
+    System.Collections.Generic.Dictionary<PXCMHandData.JointType, PXCMPointF32>;
+
+  public partial class PaintControl2D : UserControl, ISampleProcessor
   {
+    enum DisplayMode
+    {
+      Pictures,
+      Highlight
+    }
     public PaintControl2D()
     {
       InitializeComponent();
 
-      this.brushes = new SolidColorBrush[]
-      {
-        new SolidColorBrush(Colors.Red),
-        new SolidColorBrush(Colors.Green),
-        new SolidColorBrush(Colors.Blue)
-      };
-      this.brushIndex = 0;
-    }
+      this.displayMode = DisplayMode.Pictures;
 
-    public int RealSenseModuleId
-    {
-      get
-      {
-        return (PXCMHandModule.CUID);
-      }
+      this.jointPositions = new JointPositionMap();
+
+      // very simple re-use of ellipses. could easily make this so much smarter
+      this.ellipseCache = new List<Ellipse>();
+
+      this.ellipseBrush = new SolidColorBrush(
+        Color.FromArgb(0x88, 0x00, 0x00, 0x00));
+
+      this.whiteBrush = new SolidColorBrush(Colors.White);
     }
     public void Initialise(PXCMSenseManager senseManager)
     {
@@ -39,165 +42,229 @@ namespace WpfRealSenseHands.Controls
       {
         using (var handConfiguration = handModule.CreateActiveConfiguration())
         {
-          this.alertManager = new HandAlertManager(handConfiguration);
-
-          handConfiguration.EnableGesture("thumb_up", false).ThrowOnFail();
+          handConfiguration.EnableGesture("click", false).ThrowOnFail();
           handConfiguration.EnableGesture("wave", false).ThrowOnFail();
-          handConfiguration.EnableGesture("fist").ThrowOnFail();
-          handConfiguration.SubscribeGesture(this.OnGestureFired);
+
+          handConfiguration.SubscribeGesture(
+            new PXCMHandConfiguration.OnFiredGestureDelegate(
+              OnGesture));
 
           handConfiguration.ApplyChanges().ThrowOnFail();
+
         }
         this.handData = handModule.CreateOutput();
       }
     }
-    void OnGestureFired(PXCMHandData.GestureData gestureData)
+    void OnGesture(PXCMHandData.GestureData gestureData)
     {
-      if ((gestureData.name == "thumb_up") &&
-        (gestureData.state == PXCMHandData.GestureStateType.GESTURE_STATE_END))
+      if ((gestureData.name == "click") && 
+        (this.displayMode == DisplayMode.Pictures))
       {
-        this.OnChooseNextBrushColour();
+        this.clickWaiting = true;
       }
-      else if (gestureData.name == "fist")
+      else if ((gestureData.name == "wave") && 
+        (this.displayMode == DisplayMode.Highlight))
       {
-        if (gestureData.state == PXCMHandData.GestureStateType.GESTURE_STATE_START)
-        {
-          this.draw = true;
-        }
-        else if (gestureData.state == PXCMHandData.GestureStateType.GESTURE_STATE_END)
-        {
-          this.draw = false;
-          this.lastPoint = null;
-        }
-      }
-      else if ((gestureData.name == "wave") &&
-        (gestureData.state == PXCMHandData.GestureStateType.GESTURE_STATE_END))
-      {
-        this.clearPending = true;
+        this.swipeDownWaiting = true;
       }
     }
     public void ProcessFrame(PXCMCapture.Sample sample)
     {
-      this.leftTipPosition = this.rightTipPosition = null;
+      this.jointPositions.Clear();
 
       if (this.handData.Update().Succeeded())
       {
-        var imageSize = sample.depth.QueryInfo();
-
-        var handsInfoFromAlerts = this.alertManager.GetHandsInfo();
-
-        var goodHands =
-          handsInfoFromAlerts?.Where(
-            (entry => entry.Value == HandAlertManager.HandStatus.Ok));
-
-        if (goodHands != null)
+        foreach (var handId in this.GetHandIdentifiersInFrame())
         {
-          foreach (var entry in goodHands)
+          if (!this.currentHandId.HasValue ||
+            (this.currentHandId.Value == handId))
           {
-            PXCMHandData.IHand iHand;
+            this.currentHandId = handId;
 
-            if (this.handData.QueryHandDataById(entry.Key, out iHand).Succeeded())
+            PXCMHandData.IHand handInfo;
+
+            if (this.handData.QueryHandDataById(handId, out handInfo).IsSuccessful())
             {
-              var bodySide = iHand.QueryBodySide();
-
-              // I'm not 100% sure but BODY_SIDE_RIGHT seems to be the inverse
-              // of how I would interpret it as a human regardless of mirroring
-              // on the camera.
               PXCMHandData.JointData jointData;
 
-              // Get the tip of the index finger
-              if (iHand.QueryTrackedJoint(
-                  PXCMHandData.JointType.JOINT_INDEX_TIP,
-                  out jointData).Succeeded())
+              foreach (var jointType in jointTypes)
               {
-                var position = new PXCMPointF32(
-                  jointData.positionImage.x / imageSize.width,
-                  jointData.positionImage.y / imageSize.height);
+                if (handInfo.QueryTrackedJoint(jointType, out jointData).IsSuccessful())
+                {
+                  var scaledPosition = new PXCMPointF32(
+                    (float)jointData.positionImage.x / sample.depth.info.width,
+                    (float)jointData.positionImage.y / sample.depth.info.height);
 
-                if (bodySide == PXCMHandData.BodySideType.BODY_SIDE_RIGHT)
-                {
-                  this.leftTipPosition = position;
-                }
-                else
-                {
-                  this.rightTipPosition = position;
+                  this.jointPositions[jointType] = scaledPosition;
                 }
               }
             }
           }
         }
       }
+      if (this.jointPositions.Count() == 0)
+      {
+        this.currentHandId = null;
+      }
+    }
+    IEnumerable<int> GetHandIdentifiersInFrame()
+    {
+      var handCount = this.handData.QueryNumberOfHands();
+
+      for (int i = 0; i < handCount; i++)
+      {
+        int handId;
+
+        if (this.handData.QueryHandId(
+          PXCMHandData.AccessOrderType.ACCESS_ORDER_NEAR_TO_FAR,
+          i,
+          out handId).Succeeded())
+        {
+          PXCMHandData.IHand handInfo;
+
+          if (this.handData.QueryHandDataById(
+            handId,
+            out handInfo).IsSuccessful())
+          {
+            yield return handId;
+          }
+        }
+      }
     }
     public void DrawUI(PXCMCapture.Sample sample)
     {
-      if (this.clearPending)
+      if (this.displayMode == DisplayMode.Pictures)
       {
-        foreach (var line in this.drawCanvas.Children.OfType<Line>().ToList())
-        {
-          this.drawCanvas.Children.Remove(line);
-        }
-        this.clearPending = false;
-      }
-      if (this.leftTipPosition.HasValue)
-      {
-        this.leftEllipse.Visibility = System.Windows.Visibility.Visible;
-        this.leftEllipse.Fill = this.brushes[this.brushIndex];
+        int ellipseCount = 0;
 
-        Canvas.SetLeft(
-          this.leftEllipse, 
-          (this.leftTipPosition.Value.x * this.drawCanvas.ActualWidth) - this.leftEllipse.ActualWidth / 2);
-        Canvas.SetTop(
-          this.leftEllipse, 
-          (this.leftTipPosition.Value.y * this.drawCanvas.ActualHeight) - this.leftEllipse.ActualHeight / 2);
+        foreach (var joint in this.jointPositions)
+        {
+          var isTip = joint.Key == PXCMHandData.JointType.JOINT_INDEX_TIP;
+
+          var ellipse = this.MakeOrReuseEllipse(ellipseCount++, isTip);
+
+          var point = new Point(
+            (joint.Value.x * this.drawCanvas.ActualWidth),
+            (joint.Value.y * this.drawCanvas.ActualHeight));
+
+          Canvas.SetLeft(ellipse, point.X - ellipse.ActualHeight / 2);
+          Canvas.SetTop(ellipse, point.Y - ellipse.ActualWidth / 2);
+
+          if (isTip && this.clickWaiting)
+          {
+            Image hitImage = this.HitTestPageForFirstOfType<Image>(point);
+
+            if (hitImage != null)
+            {
+              this.rectangleBrush.ImageSource = hitImage.Source;
+
+              this.SwitchDisplayMode();
+            }
+            this.clickWaiting = false;
+          }
+        }
+        this.FlushEllipses(ellipseCount);
+
+      }
+      else if (this.swipeDownWaiting)
+      {
+        this.SwitchDisplayMode();
+        this.swipeDownWaiting = false;
+      }
+    }
+    void SwitchDisplayMode()
+    {
+      // this should be binding and visual states but isn't yet.
+      this.displayMode = this.displayMode == DisplayMode.Highlight ?
+        DisplayMode.Pictures : DisplayMode.Highlight;
+
+      if (this.displayMode == DisplayMode.Highlight)
+      {
+        this.highlightGrid.Visibility = Visibility.Visible;
+        this.drawCanvas.Visibility = Visibility.Collapsed;
       }
       else
       {
-        this.leftEllipse.Visibility = System.Windows.Visibility.Collapsed;
+        this.highlightGrid.Visibility = Visibility.Collapsed;
+        this.drawCanvas.Visibility = Visibility.Visible;
       }
+    }
+    T HitTestPageForFirstOfType<T>(Point point) where T : DependencyObject
+    {
+      T hitTested = default(T);
 
-      if (this.draw && this.rightTipPosition.HasValue)
+      VisualTreeHelper.HitTest(this,
+          hitObject =>
+          {
+            bool carryOn = !(hitObject is T);
+
+            if (!carryOn)
+            {
+              hitTested = (T)hitObject;
+            }
+            return (carryOn ? HitTestFilterBehavior.Continue : HitTestFilterBehavior.Stop);
+          },
+          result =>
+          {
+            bool carryOn = !(result.VisualHit is T);
+
+            return (carryOn ? HitTestResultBehavior.Continue : HitTestResultBehavior.Stop);
+          },
+          new PointHitTestParameters(point));
+
+      return (hitTested);
+    }
+    Ellipse MakeOrReuseEllipse(int n, bool large)
+    {
+      Ellipse ellipse = null;
+      var size = large ? LARGE_ELLIPSE : SMALL_ELLIPSE;
+
+      if (n < this.ellipseCache.Count)
       {
-        if (lastPoint.HasValue)
+        ellipse = this.ellipseCache[n];
+        ellipse.Width = ellipse.Height = size;
+      }
+      else
+      {
+        ellipse = new Ellipse()
         {
-          var line = this.MakeLine(
-            this.lastPoint.Value, this.rightTipPosition.Value);
-
-          this.drawCanvas.Children.Add(line);
-        }
-        this.lastPoint = this.rightTipPosition.Value;
+          Width = size,
+          Height = size,
+          Fill = this.ellipseBrush,
+          Stroke = this.whiteBrush
+        };
+        this.ellipseCache.Add(ellipse);
+        this.drawCanvas.Children.Add(ellipse);
+      }
+      return (ellipse);
+    }
+    void FlushEllipses(int n)
+    {
+      for (int i = (this.ellipseCache.Count - 1); i >= n; i--)
+      {
+        this.drawCanvas.Children.Remove(this.ellipseCache[i]);
+        this.ellipseCache.RemoveAt(i);
       }
     }
-    Line MakeLine(PXCMPointF32 pt1, PXCMPointF32 pt2)
+    static PXCMHandData.JointType[] jointTypes =
     {
-      var line = new Line()
-      {
-        X1 = pt1.x * this.drawCanvas.ActualWidth,
-        Y1 = pt1.y * this.drawCanvas.ActualHeight,
-        X2 = pt2.x * this.drawCanvas.ActualWidth,
-        Y2 = pt2.y * this.drawCanvas.ActualHeight,
-        Stroke = this.brushes[this.brushIndex],
-        StrokeThickness = 10
-      };
-      return (line);
-    }
-    void OnChooseNextBrushColour()
-    {
-      if (++this.brushIndex == this.brushes.Length)
-      {
-        this.brushIndex = 0;
-      }
-    }
-    PXCMPointF32? leftTipPosition;
-    PXCMPointF32? rightTipPosition;
+      PXCMHandData.JointType.JOINT_INDEX_TIP,
+      PXCMHandData.JointType.JOINT_MIDDLE_TIP,
+      PXCMHandData.JointType.JOINT_RING_TIP,
+      PXCMHandData.JointType.JOINT_PINKY_TIP,
+      PXCMHandData.JointType.JOINT_THUMB_TIP
+    };
+    DisplayMode displayMode;
+    List<Ellipse> ellipseCache;
+    JointPositionMap jointPositions;
+    int? currentHandId;
     PXCMHandData handData;
     PXCMSenseManager senseManager;
-    HandAlertManager alertManager;
-    Brush rightBrush;
-    Brush leftBrush;
-    SolidColorBrush[] brushes;
-    int brushIndex;
-    bool draw;
-    PXCMPointF32? lastPoint;
-    bool clearPending;
+    SolidColorBrush ellipseBrush;
+    SolidColorBrush whiteBrush;
+    const int SMALL_ELLIPSE = 25;
+    const int LARGE_ELLIPSE = 50;
+    bool clickWaiting;
+    bool swipeDownWaiting;
   }
 }

@@ -1,94 +1,66 @@
 ﻿namespace WpfRealSenseHands
 {
-  using System;
   using System.Collections.Generic;
-  using System.Windows;
-  using System.Linq;
-  using System.Diagnostics;
   using System.Threading;
-  using System.Windows.Threading;
   using System.Threading.Tasks;
+  using System.Windows;
 
   public partial class MainWindow : Window
   {
     public MainWindow()
     {
       InitializeComponent();
-      this.cancelTokenSource = new CancellationTokenSource();
       this.Loaded += OnLoaded;
-      this.Closing += OnClosing;
-    }
-    void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
-    {
-      this.cancelTokenSource.Cancel();
     }
     void OnLoaded(object sender, RoutedEventArgs e)
     {
+      // Assuming it's ok to begin this process here on the UI
+      // thread and then move it to our other thread...
       this.senseManager = PXCMSenseManager.CreateInstance();
-
-      this.senseManager.captureManager.SetRealtime(false);
 
       this.InitialiseRenderers();
 
-      this.senseManager.Init(
-        new PXCMSenseManager.Handler()
-        {
-          onNewSample = this.OnNewSample,
-          onModuleProcessedFrame = this.OnModuleProcessedFrame
-        }).ThrowOnFail();
+      this.senseManager.Init();
 
-      this.senseManager.StreamFrames(false);
-
+      using (var power = this.senseManager.session.CreatePowerManager())
+      {
+        power.SetState(PXCMPowerState.State.STATE_PERFORMANCE);
+      }
       this.senseManager.captureManager.device.SetMirrorMode(
         PXCMCapture.Device.MirrorMode.MIRROR_MODE_HORIZONTAL);
-    }
-    pxcmStatus OnNewSample(int moduleId, PXCMCapture.Sample sample)
-    {
-      foreach (var sampleProcessor in this.sampleProcessors.OfType<ISampleProcessor>())
-      {
-        if (!(sampleProcessor is IModuleProcessor))
-        { 
-          sampleProcessor.ProcessFrame(sample);
-        }
-      }
-      Dispatcher.InvokeAsync(
-        () =>
-        {
-          foreach (var sampleProcessor in this.sampleProcessors.OfType<ISampleProcessor>())
-          {
-            if (!(sampleProcessor is IModuleProcessor))
-            {
-              sampleProcessor.DrawUI(sample);
-            }
-          }
-        }
-      );
-      return (pxcmStatus.PXCM_STATUS_NO_ERROR);
-    }
-    pxcmStatus OnModuleProcessedFrame(int mid, PXCMBase module, PXCMCapture.Sample sample)
-    {
-      foreach (var moduleProcessor in this.sampleProcessors.OfType<IModuleProcessor>())
-      {
-        if (moduleProcessor.RealSenseModuleId == mid)
-        {
-          moduleProcessor.ProcessFrame(sample);
-        }
-      }
-      Dispatcher.InvokeAsync(
-        () =>
-        {
-          foreach (var moduleProcessor in this.sampleProcessors.OfType<IModuleProcessor>())
-          {
-            if (moduleProcessor.RealSenseModuleId == mid)
-            {
-              moduleProcessor.DrawUI(sample);
-            }
-          }
-        }
-      );
-      return (pxcmStatus.PXCM_STATUS_NO_ERROR);
-    }
 
+      // Move most work onto a background thread.
+      Task.Run(this.RunFrames);
+    }
+    async Task RunFrames()
+    {
+      while (true)
+      {
+        while (this.senseManager.AcquireFrame(true).Succeeded())
+        {
+          var sample = this.senseManager.QuerySample();
+
+          // Do the capturing of data on this thread.
+          foreach (var sampleProcessor in this.sampleProcessors)
+          {
+            sampleProcessor.ProcessFrame(sample);
+          }
+          // Do the drawing on the UI thread BUT waiting for it to
+          // happen here which isn't ideal but we are ok with it
+          // for now.
+          await this.Dispatcher.InvokeAsync(
+            () =>
+            {
+              foreach (var sampleProcessor in this.sampleProcessors)
+              {
+                sampleProcessor.DrawUI(sample);
+              }
+            }
+          );
+          this.senseManager.ReleaseFrame();
+        }
+      }
+    }
     void InitialiseRenderers()
     {
       this.sampleProcessors = this.BuildSampleProcessors();
@@ -112,7 +84,6 @@
       }
       return (list);
     }
-    CancellationTokenSource cancelTokenSource;
     IEnumerable<ISampleProcessor> sampleProcessors;
     PXCMSenseManager senseManager;
   }

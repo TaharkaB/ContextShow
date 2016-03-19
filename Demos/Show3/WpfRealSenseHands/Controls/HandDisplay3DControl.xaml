@@ -14,7 +14,7 @@
       CoordinateSystemVerticalPosition="Center">
       <helix:HelixViewport3D.DefaultCamera>
         <PerspectiveCamera
-          Position="0,0,1"
+          Position="0,0,1.2"
           LookDirection="0,0,-1"
           UpDirection="0,1,0" />
       </helix:HelixViewport3D.DefaultCamera>

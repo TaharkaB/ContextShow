@@ -24,7 +24,7 @@
     static public readonly float SphereRadius = 0.005f;
     static public readonly float TubeDiameter = 0.003f;
   }
-  public partial class HandDisplay3DControl : UserControl, IModuleProcessor
+  public partial class HandDisplay3DControl : UserControl, ISampleProcessor
   {
     public HandDisplay3DControl()
     {
@@ -40,22 +40,12 @@
     }
     public void Initialise(PXCMSenseManager senseManager)
     {
+      // This module needs to initialise after the paint module otherwise
+      // bits won't be set up for it.
       this.senseManager = senseManager;
-
-      this.senseManager.EnableHand().ThrowOnFail();
 
       using (var handModule = this.senseManager.QueryHand())
       {
-        using (var handConfiguration = handModule.CreateActiveConfiguration())
-        {
-          this.alertManager = new HandAlertManager(handConfiguration);
-
-          handConfiguration.EnableStabilizer(true).ThrowOnFail();
-
-          handConfiguration.EnableTrackedJoints(true).ThrowOnFail();
-
-          handConfiguration.ApplyChanges().ThrowOnFail();
-        }
         this.handData = handModule.CreateOutput();
       }
     }
@@ -67,38 +57,29 @@
 
       if (this.handData.Update().Succeeded())
       {
-        var handsInfoFromAlerts = this.alertManager.GetHandsInfo();
-
-        var goodHands =
-          handsInfoFromAlerts?.Where(
-            (entry => entry.Value == HandAlertManager.HandStatus.Ok));
-
-        if (goodHands != null)
+        foreach (var handId in this.GetHandIdentifiersInFrame())
         {
-          foreach (var entry in goodHands)
+          PXCMHandData.IHand iHand;
+
+          // gather the data to display that hand.
+          if (this.handData.QueryHandDataById(handId, out iHand).Succeeded())
           {
-            PXCMHandData.IHand iHand;
-
-            // gather the data to display that hand.
-            if (this.handData.QueryHandDataById(entry.Key, out iHand).Succeeded())
+            foreach (PXCMHandData.JointType joint in Enum.GetValues(
+              typeof(PXCMHandData.JointType)))
             {
-              foreach (PXCMHandData.JointType joint in Enum.GetValues(
-                typeof(PXCMHandData.JointType)))
-              {
-                PXCMHandData.JointData jointData;
+              PXCMHandData.JointData jointData;
 
-                if (iHand.QueryTrackedJoint(joint, out jointData).Succeeded())
+              if (iHand.QueryTrackedJoint(joint, out jointData).Succeeded())
+              {
+                if (!this.handMap.ContainsKey(handId))
                 {
-                  if (!this.handMap.ContainsKey(entry.Key))
-                  {
-                    this.handMap[entry.Key] = new JointPositionMap();
-                  }
-                  this.handMap[entry.Key][joint] =
-                    new PXCMPoint3DF32(
-                      0.0f - jointData.positionWorld.x,
-                      jointData.positionWorld.y,
-                      jointData.positionWorld.z);
+                  this.handMap[handId] = new JointPositionMap();
                 }
+                this.handMap[handId][joint] =
+                  new PXCMPoint3DF32(
+                    0.0f - jointData.positionWorld.x,
+                    jointData.positionWorld.y,
+                    jointData.positionWorld.z);
               }
             }
           }
@@ -195,6 +176,30 @@
       transform.OffsetY = position.y;
       transform.OffsetZ = position.z;
     }
+    IEnumerable<int> GetHandIdentifiersInFrame()
+    {
+      var handCount = this.handData.QueryNumberOfHands();
+
+      for (int i = 0; i < handCount; i++)
+      {
+        int handId;
+
+        if (this.handData.QueryHandId(
+          PXCMHandData.AccessOrderType.ACCESS_ORDER_NEAR_TO_FAR,
+          i,
+          out handId).Succeeded())
+        {
+          PXCMHandData.IHand handInfo;
+
+          if (this.handData.QueryHandDataById(
+            handId,
+            out handInfo).IsSuccessful())
+          {
+            yield return handId;
+          }
+        }
+      }
+    }
     void ClearLostHands()
     {
       foreach (var oldHandId in this.drawnHandJointVisualMap.Keys.Where(
@@ -254,11 +259,7 @@
     static Brush[] brushes =
     {
       Brushes.Red,
-      Brushes.Green,
       Brushes.Blue,
-      Brushes.Yellow,
-      Brushes.Cyan,
-      Brushes.Purple
     };
     static PXCMHandData.JointType[][] jointConnections =
     {
@@ -308,7 +309,6 @@
     HandMap handMap;
     HandVisualMap drawnHandJointVisualMap;
     BoneVisualMap drawnHandBoneVisualMap;
-    HandAlertManager alertManager;
     PXCMHandData handData;
     PXCMSenseManager senseManager;
   }

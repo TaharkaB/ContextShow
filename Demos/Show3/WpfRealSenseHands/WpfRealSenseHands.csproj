@@ -88,29 +88,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\ColorVideoControl.xaml.cs" />
-    <Compile Include="Controls\DepthVideoControl.xaml.cs" />
     <Compile Include="Controls\HandDisplay3DControl.xaml.cs">
       <DependentUpon>HandDisplay3DControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\HandAlertManager.cs" />
     <Compile Include="Controls\PaintControl2D.xaml.cs">
       <DependentUpon>PaintControl2D.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IModuleProcessor.cs" />
     <Compile Include="Interfaces\ISampleProcessor.cs" />
     <Compile Include="Utility\PXCMStatusExtensions.cs" />
-    <Page Include="Controls\ColorVideoControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\DepthVideoControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\HandDisplay3DControl.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\PaintControl2D.xaml">
       <SubType>Designer</SubType>
@@ -157,10 +145,26 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Assets\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="Controls\Assets\img10.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Controls\Assets\img11.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Controls\Assets\img12.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Controls\Assets\img7.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Controls\Assets\img8.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Controls\Assets\img9.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="libpxccpp2c.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

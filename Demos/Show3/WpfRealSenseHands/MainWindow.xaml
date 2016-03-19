@@ -10,32 +10,24 @@
     x:Name="parentGrid">
     <Grid.RowDefinitions>
       <RowDefinition />
-      <RowDefinition
-        Height="Auto" />
-
+      <RowDefinition Height="*"/>
       <RowDefinition />
-
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition />
       <ColumnDefinition
-        Width="Auto" />
+        Width="*" />
       <ColumnDefinition />
     </Grid.ColumnDefinitions>
-    
-    <controls:DepthVideoControl
-      Grid.RowSpan="3"
-      Grid.ColumnSpan="3" />
-    <controls:PaintControl2D
-      Grid.RowSpan="3"
-      Grid.ColumnSpan="3" />
-    <!--<controls:ColorVideoControl
+
+    <controls:PaintControl2D 
       Grid.RowSpan="3"
       Grid.ColumnSpan="3"/>
+
     <controls:HandDisplay3DControl
       Background="Black"
-      Grid.ColumnSpan="3"
-      Grid.RowSpan="3"
-      Opacity="0.5" />-->
+      Opacity="0.5"
+      Grid.Row="2"
+      Grid.Column="2"/>
   </Grid>
 </Window>

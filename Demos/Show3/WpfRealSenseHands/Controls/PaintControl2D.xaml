@@ -9,14 +9,60 @@
   d:DesignHeight="300"
   d:DesignWidth="300">
   <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <Image
+      Stretch="Fill"
+      Source="Assets/img10.jpg" />
+    <Image
+      Stretch="Fill"
+      Source="Assets/img11.jpg"
+      Grid.Column="1" />
+    <Image
+      Stretch="Fill"
+      Source="Assets/img9.jpg"
+      Grid.Column="1"
+      Grid.Row="2" />
+    <Image
+      Stretch="Fill"
+      Source="Assets/img8.jpg"
+      Grid.Row="2" />
+    <Image
+      Source="Assets/img7.jpg"
+      Stretch="Fill"
+      Grid.Row="1"
+      Grid.Column="1" />
+    <Image
+      Stretch="Fill"
+      Source="Assets/img12.jpg"
+      Grid.Row="1" />
     <Canvas
-      x:Name="drawCanvas">
-      <Ellipse
-        Width="30"
-        Height="30"
-        Stroke="Black"
-        Fill="Red"
-        x:Name="leftEllipse" />
+      x:Name="drawCanvas" Grid.RowSpan="3" Grid.ColumnSpan="2">
     </Canvas>
+    <Grid
+      x:Name="highlightGrid"
+      Background="#BB000000"
+      Visibility="Collapsed"
+      Grid.RowSpan="3"
+      Grid.ColumnSpan="2">
+      <Rectangle
+        Margin="80">
+        <Rectangle.Fill>
+          <ImageBrush
+            x:Name="rectangleBrush"
+            Stretch="Fill">
+
+          </ImageBrush>
+        </Rectangle.Fill>
+
+      </Rectangle>
+    </Grid>
   </Grid>
 </UserControl>
