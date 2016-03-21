@@ -232,6 +232,7 @@
           endGameMessage, "Game Over");
 
         await dialog.ShowAsync();
+
         this.InitialiseGame();
       }
     }
