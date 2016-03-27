@@ -62,7 +62,7 @@
           new Guid[] { detectedFaceId },
           1); // only 1 candidate being asked for
 
-        if (results == null)
+        if ((results == null) || (results.First().Candidates.Length == 0))
         {
           await this.MessageDialog("no results", "that didn't work - got zero results");
         }
@@ -75,9 +75,8 @@
           this.cameraDisplay.ShowLegend($"We think this is {name}");
 
           await Task.Delay(TimeSpan.FromSeconds(5));
-
-          this.cameraDisplay.ResetVisuals();
-        }      
+        }
+        this.cameraDisplay.ResetVisuals();
       }
     }
     async Task<Guid> DetectFirstFaceInCapturedPhotoAsync()
