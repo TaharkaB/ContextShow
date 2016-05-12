@@ -17,15 +17,10 @@
             Draw="OnDraw" />
         <InkCanvas
             x:Name="inkCanvas" />
-        <!--<ToggleSwitch
+        <ToggleSwitch
             OffContent="Regular"
             OnContent="Geometry"
             IsOn="False"
-            Toggled="OnDrawingModeChanged" />-->
-        <!--<w2d:CanvasControl
-            x:Name="canvasControl"
-            xmlns:w2d="using:Microsoft.Graphics.Canvas.UI.Xaml"
-            SizeChanged="OnCanvasControlSizeChanged"
-            Draw="OnDraw" />-->
+            Toggled="OnDrawingModeChanged" />
     </Grid>
 </Page>
