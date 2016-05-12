@@ -1,0 +1,31 @@
+﻿<Page
+    x:Class="CustomDrying.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CustomDrying"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:w2d="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    mc:Ignorable="d">
+
+    <Grid
+        Background="PowderBlue"
+        x:Name="grid">
+        <w2d:CanvasControl
+            x:Name="canvasControl"
+            xmlns:w2d="using:Microsoft.Graphics.Canvas.UI.Xaml"
+            Draw="OnDraw" />
+        <InkCanvas
+            x:Name="inkCanvas" />
+        <!--<ToggleSwitch
+            OffContent="Regular"
+            OnContent="Geometry"
+            IsOn="False"
+            Toggled="OnDrawingModeChanged" />-->
+        <!--<w2d:CanvasControl
+            x:Name="canvasControl"
+            xmlns:w2d="using:Microsoft.Graphics.Canvas.UI.Xaml"
+            SizeChanged="OnCanvasControlSizeChanged"
+            Draw="OnDraw" />-->
+    </Grid>
+</Page>
