@@ -38,6 +38,7 @@
             </AppBarButton>
 
             <AppBarButton
+                Margin="12,0,0,0"
                 Label="Delete All"
                 Click="OnClearStrokes">
                 <SymbolIcon
@@ -45,7 +46,8 @@
             </AppBarButton>
             <AppBarButton
                 Label="Select All"
-                Click="OnSelectAll">
+                Click="OnSelectAll"
+                Margin="12,0,0,0">
                 <SymbolIcon
                     Symbol="SelectAll" />
             </AppBarButton>
@@ -82,6 +84,7 @@
                     Symbol="Paste" />
             </AppBarButton>
             <AppBarButton
+                Margin="12,0,0,0"
                 Label="Save"
                 Click="OnSave">
                 <SymbolIcon
@@ -94,6 +97,7 @@
                     Symbol="OpenFile" />
             </AppBarButton>
             <AppBarButton
+                Margin="12,0,0,0"
                 Label="Recognize All"
                 Click="OnRecognizeAsync">
                 <SymbolIcon
@@ -106,8 +110,9 @@
                     Symbol="Document" />
             </AppBarButton>
 
-            <!--<inkbar:InkToolbar
-                TargetInkCanvas="{Binding ElementName=inkCanvas}" />-->
+            <inkbar:InkToolbar
+                Margin="12,0,0,0"
+                TargetInkCanvas="{Binding ElementName=inkCanvas}" />
                       
         </StackPanel>
         <Canvas

@@ -1,12 +1,11 @@
 ﻿namespace HelloDirectInk
 {
-  using System.Collections.Generic;
   using System.Linq;
-  using Windows.Foundation;
   using Windows.UI;
   using Windows.UI.Core;
   using Windows.UI.Input.Inking;
   using Windows.UI.Xaml.Controls;
+  using Windows.UI.Xaml.Shapes;
 
   public sealed partial class MainPage : Page
   {
@@ -15,43 +14,37 @@
       this.inkPresenter.InputProcessingConfiguration.RightDragAction =
         InkInputRightDragAction.LeaveUnprocessed;
 
-      this.inkPresenter.UnprocessedInput.PointerPressed += OnUnhandledPointerReleased;
+      this.inkPresenter.UnprocessedInput.PointerPressed += OnUnhandledPointerPressed;
       this.inkPresenter.UnprocessedInput.PointerMoved += OnUnhandledPointerMoved;
-      this.inkPresenter.UnprocessedInput.PointerReleased += OnUnhandledPointerPressed;
+      this.inkPresenter.UnprocessedInput.PointerReleased += OnUnhandledPointerReleased;
     }
     void OnUnhandledPointerPressed(InkUnprocessedInput sender, PointerEventArgs args)
     {
       this.backingCanvas.Children.Clear();
-      this.selectionPoints = new List<Point>();
-      this.selectionPoints.Add(args.CurrentPoint.Position);
+
+      this.selectionLine = 
+        this.MakeBackingCanvasLine(Colors.Silver, 3, true);
+
+      this.backingCanvas.Children.Add(this.selectionLine);
+
+      this.selectionLine.Points.Add(args.CurrentPoint.Position);
     }
     void OnUnhandledPointerMoved(InkUnprocessedInput sender, PointerEventArgs args)
     {
-      if (this.selectionPoints != null)
-      {
-        var lastPoint = this.selectionPoints[this.selectionPoints.Count - 1];
-
-        var currentPoint = args.CurrentPoint.Position;
-
-        // We should really build up a polyline, this is a cheap version.
-        var line =
-          this.MakeBackingCanvasLine(
-            lastPoint, currentPoint, Colors.Silver, 3, true);
-
-        this.backingCanvas.Children.Add(line);
-         
-        this.selectionPoints.Add(args.CurrentPoint.Position);
+      if (this.selectionLine != null)
+      {         
+        this.selectionLine.Points.Add(args.CurrentPoint.Position);
       }
     }
     void OnUnhandledPointerReleased(InkUnprocessedInput sender, PointerEventArgs args)
     {
-      if (this.selectionPoints != null)
+      if (this.selectionLine != null)
       {
-        this.selectionPoints.Add(args.CurrentPoint.Position);
-        this.inkStrokeContainer.SelectWithPolyLine(this.selectionPoints);
+        this.selectionLine.Points.Add(args.CurrentPoint.Position);
+        this.inkStrokeContainer.SelectWithPolyLine(this.selectionLine.Points);
         this.UpdateStrokesView();
       }
-      this.selectionPoints = null;
+      this.selectionLine = null;
     }
     void HighlightSelectedStrokes()
     {
@@ -69,6 +62,6 @@
         this.backingCanvas.Children.Add(rectangle);
       }
     }
-    List<Point> selectionPoints;
+    Polyline selectionLine;
   }
 }

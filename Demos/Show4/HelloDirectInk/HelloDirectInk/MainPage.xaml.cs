@@ -31,16 +31,12 @@
       }
       return (r);
     }
-    Line MakeBackingCanvasLine(Point p1, Point p2, Color color, int thickness,
+    Polyline MakeBackingCanvasLine(Color color, int thickness,
       bool dash = false)
     {
-      var line =
-        new Line()
+      var polyline =
+        new Polyline()
         {
-          X1 = p1.X,
-          Y1 = p1.Y,
-          X2 = p2.X,
-          Y2 = p2.Y,
           Stroke = new SolidColorBrush(color),
           StrokeThickness = thickness
         };
@@ -49,9 +45,9 @@
       {
         var dashes = new DoubleCollection();
         dashes.Add(5.0d);
-        line.StrokeDashArray = dashes;
+        polyline.StrokeDashArray = dashes;
       }
-      return (line);
+      return (polyline);
     }
   }
 }
