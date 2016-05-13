@@ -136,7 +136,7 @@
                     <DataTemplate>
                         <TextBlock
                             Text="{Binding}"
-                            FontSize="16" />
+                            FontSize="14" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

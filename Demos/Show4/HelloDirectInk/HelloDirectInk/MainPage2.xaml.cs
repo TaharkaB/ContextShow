@@ -8,18 +8,12 @@
   {
     void AddStrokeEventHandlers()
     {
-      int strokeCount = 0;
-
       this.inkPresenter.StrokesCollected += (s, e) =>
       {
-        strokeCount += e.Strokes.Count;
-        this.txtStrokeCount.Text = $"{strokeCount} strokes";
         this.UpdateStrokesView();
       };
       this.inkPresenter.StrokesErased += (s, e) =>
       {
-        strokeCount -= e.Strokes.Count;
-        this.txtStrokeCount.Text = $"{strokeCount} strokes";
         this.UpdateStrokesView();
       };
       this.inkPresenter.StrokeInput.StrokeStarted += (s, e) =>
@@ -33,6 +27,9 @@
     }
     void UpdateStrokesView()
     {
+      this.txtStrokeCount.Text = 
+        $"{this.inkStrokeContainer.GetStrokes().Count} strokes";
+
       this.lstStrokes.ItemsSource = this.BuildStrokeDescriptions();
       this.HighlightSelectedStrokes();
       this.DrawRecognisedStrokes();

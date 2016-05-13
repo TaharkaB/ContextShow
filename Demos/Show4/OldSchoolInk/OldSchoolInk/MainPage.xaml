@@ -44,8 +44,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid
-                        Margin="4,0,4,4"
-                        Padding="2">
+                        Margin="4,0,4,4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition
                                 Width="3*" />
@@ -57,11 +56,11 @@
                             Grid.ColumnSpan="2" />
                         <TextBlock
                             Text="{Binding Key}"
-                            FontSize="16"
+                            FontSize="12"
                             Margin="2" />
                         <TextBlock
                             Grid.Column="1"
-                            FontSize="16"
+                            FontSize="12"
                             Text="{Binding Value.Value}"
                             Margin="2" />
                     </Grid>
