@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>a147dc6f-f8b8-483d-928e-526f1bd25d14</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="AllJoynBusObjectManager.cpp" />
+    <ClCompile Include="AllJoynHelpers.cpp" />
+    <ClCompile Include="LightControlConsumer.cpp" />
+    <ClCompile Include="LightControlProducer.cpp" />
+    <ClCompile Include="LightControlServiceEventAdapter.cpp" />
+    <ClCompile Include="LightControlServiceEventArgs.cpp" />
+    <ClCompile Include="LightControlSignals.cpp" />
+    <ClCompile Include="LightControlWatcher.cpp" />
+    <ClCompile Include="TypeConversionHelpers.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="AllJoynBusObjectManager.h" />
+    <ClInclude Include="AllJoynHelpers.h" />
+    <ClInclude Include="ILightControlService.h" />
+    <ClInclude Include="LightControlConsumer.h" />
+    <ClInclude Include="LightControlEventArgs.h" />
+    <ClInclude Include="LightControlMethodResults.h" />
+    <ClInclude Include="LightControlProducer.h" />
+    <ClInclude Include="LightControlServiceEventAdapter.h" />
+    <ClInclude Include="LightControlServiceEventArgs.h" />
+    <ClInclude Include="LightControlSignals.h" />
+    <ClInclude Include="LightControlStructures.h" />
+    <ClInclude Include="LightControlWatcher.h" />
+    <ClInclude Include="TypeConversionHelpers.h" />
+  </ItemGroup>
+</Project>

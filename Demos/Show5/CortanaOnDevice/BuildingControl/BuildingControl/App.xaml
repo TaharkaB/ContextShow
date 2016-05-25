@@ -1,0 +1,15 @@
+﻿<Application
+    x:Class="BuildingControl.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BuildingControl"
+    RequestedTheme="Dark"
+    xmlns:u="using:BuildingControl.Utility">
+    <Application.Resources>
+        <u:VisibilityConverter
+            x:Key="visConverter" />
+        <u:RoomTypeToImageSourceConverter
+            x:Key="roomTypeConverter" />
+    </Application.Resources>
+
+</Application>

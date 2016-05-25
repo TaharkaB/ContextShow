@@ -1,0 +1,18 @@
+﻿<node name="/com/taulty/lightcontrol">
+  <interface name="com.taulty.LightControl">
+    <method name="GetBuildingDefinitionJson">
+      <arg name="json" type="s" direction="out"/>
+    </method>
+    <method name="SwitchBuilding">
+      <arg name="onOff" type="b" direction="in"/>
+    </method>
+    <method name="SwitchRoom">
+      <arg name="roomName" type="s" direction="in"/>
+      <arg name="onOff" type="b" direction="in"/>
+    </method>
+    <method name="ToggleRoomLight">
+      <arg name="roomName" type="s" direction="in"/>
+      <arg name="lightIndex" type="i" direction="in"/>    
+    </method>
+  </interface>
+</node>
