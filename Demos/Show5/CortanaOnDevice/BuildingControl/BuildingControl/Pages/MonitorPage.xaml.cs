@@ -22,9 +22,15 @@
   {
     public event PropertyChangedEventHandler PropertyChanged;
 
+    // Pretty horrible thing to do but makes things a lot simpler elsewhere
+    // in our App class and its activation handler so we do it for the
+    // demo.
+    public static MonitorPage Instance { get; set; }
+
     public MonitorPage()
     {
       this.InitializeComponent();
+      Instance = this;
     }
     protected async override void OnNavigatedTo(NavigationEventArgs e)
     {
@@ -178,27 +184,32 @@
       {
         var otherBuilding = (AllJoynRemoteBuilding)lstOtherBuildings.SelectedItem;
 
-        var result = await LightControlConsumer.JoinSessionAsync(
-          otherBuilding.AllJoynInfo,
-          this.lightControlWatcher);
+        await SwitchToRemoteBuildingAsync(otherBuilding);
+      }
+    }
+    async Task SwitchToRemoteBuildingAsync(AllJoynRemoteBuilding otherBuilding)
+    {
+      var result = await LightControlConsumer.JoinSessionAsync(
+        otherBuilding.AllJoynInfo,
+        this.lightControlWatcher);
 
-        if (result.Status == AllJoynStatus.Ok)
+      if (result.Status == AllJoynStatus.Ok)
+      {
+        this.lightControlConsumer = result.Consumer;
+
+        var json = await this.lightControlConsumer.GetBuildingDefinitionJsonAsync();
+
+        if (json.Status == AllJoynStatus.Ok)
         {
-          this.lightControlConsumer = result.Consumer;
+          var building = JsonConvert.DeserializeObject<Building>(json.Json);
+          this.Building = building;
 
-          var json = await this.lightControlConsumer.GetBuildingDefinitionJsonAsync();
-
-          if (json.Status == AllJoynStatus.Ok)
-          {
-            var building = JsonConvert.DeserializeObject<Building>(json.Json);
-            this.Building = building;
-
-            this.isLocalBuilding = false;
-          }
+          this.isLocalBuilding = false;
         }
       }
     }
-    void OnUISwitchToLocalBuilding(object sender, RoutedEventArgs e)
+
+    void OnSwitchToLocalBuilding()
     {
       if (!this.isLocalBuilding)
       {
@@ -207,6 +218,10 @@
         this.isLocalBuilding = true;
         this.Building = BuildingPersistence.Instance;
       }
+    }
+    void OnUISwitchToLocalBuilding(object sender, RoutedEventArgs e)
+    {
+      this.OnSwitchToLocalBuilding();
     }
     bool SetProperty<T>(ref T storage, T value,
       [CallerMemberName] String propertyName = null)
@@ -235,6 +250,39 @@
         }
       );
     }
+    internal async Task SwitchToBuildingAsync(string building)
+    {
+      // This one is a bit tricky. We might just be starting up and waiting
+      // for AllJoyn notifications that there are other buildings out there
+      // and so there's a slew of race conditions here.
+      if (building == this.Building.Name)
+      {
+        // NB: this doesn't switch if it doesn't need to.
+        this.OnSwitchToLocalBuilding();
+      }
+      else
+      {
+        // We're in an interesting situation as we may have just spun the
+        // page up and it's listening for remote buildings to come in and
+        // so we give it a little time to see if that happens and, if not,
+        // we leave well alone.
+        for (int i = 0; i < ARBITRARY_RETRY_COUNT; i++)
+        {
+          // Do we already know this remote building?
+          var remoteBuilding =
+            this.RemoteBuildings.FirstOrDefault(b => b.Name == building);
+
+          if (remoteBuilding != null)
+          {
+            await this.SwitchToRemoteBuildingAsync(remoteBuilding);
+            break;
+          }
+          await Task.Delay(TimeSpan.FromSeconds(ARBITRARY_RETRY_DELAY));
+        }
+      }
+    }
+    const int ARBITRARY_RETRY_COUNT = 3;
+    const int ARBITRARY_RETRY_DELAY = 5;
     bool isLocalBuilding;
     Building currentBuilding;
     LightControlService lightService;

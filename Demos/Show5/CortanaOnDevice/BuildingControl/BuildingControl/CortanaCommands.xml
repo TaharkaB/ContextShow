@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<VoiceCommands xmlns="http://schemas.microsoft.com/voicecommands/1.2">
+
+  <CommandSet xml:lang="en-gb">
+
+    <CommandPrefix>homecontrol</CommandPrefix>
+
+    <Example>show me the lights in the cottage</Example>
+
+    <Command Name="showLights">
+      <Example>show me the lights in the house</Example>
+      <ListenFor>[show me the] lights in the {building}</ListenFor>
+      <Feedback>I'll get the app and ask it to find the {building} for you</Feedback>
+      
+      <!-- Target is not something we take any account of in our code -->
+      <Navigate Target="Anywhere.xaml"/>
+      
+    </Command>
+    <!-- Note, these are statically set but we could dynamically rewrite them
+         if we wanted to - just a bit more code in our app to do it. 
+    -->
+    <PhraseList Label="building" Disambiguate="true">
+      <Item>Cottage</Item>
+      <Item>House</Item>
+      <Item>Shed</Item>
+      <Item>Caravan</Item>
+      <Item>Garage</Item>
+    </PhraseList>
+  </CommandSet>
+</VoiceCommands>
