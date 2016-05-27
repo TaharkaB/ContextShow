@@ -13,7 +13,7 @@
             Source="ms-appx:///Assets/bulb.png" />
         <Image
             x:Name="imgLit"
-            Source="ms-appx:///Assets/litbulb.png"
+            Source="ms-appx:///Assets/lightbulb.png"
             Visibility="Collapsed" />
     </Grid>
 </UserControl>

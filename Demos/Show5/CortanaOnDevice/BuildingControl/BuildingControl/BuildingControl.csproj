@@ -123,11 +123,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Bathroom.png" />
+    <Content Include="Assets\Bathroom68x68.png" />
     <Content Include="Assets\bulb.png" />
     <Content Include="Assets\house.png" />
-    <Content Include="Assets\litbulb.png" />
+    <Content Include="Assets\house68x68.png" />
+    <Content Include="Assets\Kitchen68x68.png" />
+    <Content Include="Assets\lightbulb.png" />
     <Content Include="Assets\Kitchen.png" />
     <Content Include="Assets\Lounge.png" />
+    <Content Include="Assets\Lounge68x68.png" />
     <Content Include="Assets\NewStoreLogo.scale-100.png" />
     <Content Include="Assets\NewStoreLogo.scale-125.png" />
     <Content Include="Assets\NewStoreLogo.scale-150.png" />
@@ -137,6 +141,7 @@
     <None Include="AllJoyn\InterfaceDefinition.xml">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Assets\Office68x68.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-125.png" />
     <Content Include="Assets\SplashScreen.scale-150.png" />

@@ -116,6 +116,10 @@
       <Project>{A935E653-3C76-4BB3-AF03-8A3CC3DEFB5A}</Project>
       <Name>BuildingControlLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.taulty.LightControl\com.taulty.LightControl.vcxproj">
+      <Project>{b0d57e0b-8441-4b1d-a36f-031175052d98}</Project>
+      <Name>com.taulty.LightControl</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

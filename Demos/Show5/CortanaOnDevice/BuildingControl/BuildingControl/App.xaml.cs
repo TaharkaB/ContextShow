@@ -113,8 +113,8 @@ namespace BuildingControl
           {
             await MonitorPage.Instance.SwitchToBuildingAsync(commandDetails.Building);
           }
-          if ((commandDetails.Building == "switchLights") &&
-              (commandDetails.OnOff.HasValue))
+          if (!string.IsNullOrEmpty(commandDetails.Building) &&
+              commandDetails.OnOff.HasValue)
           {
             if (string.IsNullOrEmpty(commandDetails.Room))
             {

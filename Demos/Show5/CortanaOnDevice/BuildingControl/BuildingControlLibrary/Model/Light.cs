@@ -36,12 +36,11 @@ namespace BuildingControl.Model
             },
             null
           );
-
           this.SwitchPin();
         }
       }
     }     
-    void SwitchPin()
+    public void SwitchPin()
     {
       if (this.GpioPinNumber != -1)
       {

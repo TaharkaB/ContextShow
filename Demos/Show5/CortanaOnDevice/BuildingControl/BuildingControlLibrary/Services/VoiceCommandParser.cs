@@ -7,9 +7,9 @@
   public class BuildingCommandDetails
   {
     public string RulePath { get; set; }
-    public string Building { get; internal set; }
-    public string Room { get; internal set; }
-    public bool? OnOff { get; internal set; }
+    public string Building { get; set; }
+    public string Room { get; set; }
+    public bool? OnOff { get; set; }
   }
   public static class BuildingVoiceCommandParser
   {

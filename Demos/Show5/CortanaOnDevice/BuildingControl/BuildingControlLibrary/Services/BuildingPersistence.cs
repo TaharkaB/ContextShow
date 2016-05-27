@@ -6,6 +6,7 @@
   using Windows.Storage;
   using System;
   using Newtonsoft.Json;
+  using System.Linq;
 
   // This could/should be migrated into a proper service which is injected but,
   // for demo purposes, we just make it static here and use it where we need
@@ -27,6 +28,15 @@
         var json = await FileIO.ReadTextAsync(file);
 
         building = JsonConvert.DeserializeObject<Building>(json);
+
+        // We run through the lights to make sure that if they are connected
+        // to GPIO switches then we turn them on/off the right way.
+        var lights = building.Rooms.SelectMany(r => r.Lights);
+
+        foreach (var light in lights)
+        {
+          light.SwitchPin();
+        }
       }
       catch (FileNotFoundException)
       {
@@ -45,7 +55,10 @@
 
         await FileIO.WriteTextAsync(file, json);
 
-        ApplicationData.Current.SignalDataChanged();
+        if (fireDataChanged)
+        {
+          ApplicationData.Current.SignalDataChanged();
+        }
       }
     }
     static readonly string STORAGE_FILE = "building.dat";
