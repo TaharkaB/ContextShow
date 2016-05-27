@@ -12,8 +12,16 @@
   using System.Collections.Generic;
   using Windows.Storage;
   using Newtonsoft.Json;
+
   public sealed class BackgroundTask : IBackgroundTask
   {
+    /// <summary>
+    /// Big note - we do not deal with cancellation in this background task
+    /// and we should. We should handle the situation both the background
+    /// task being cancelled and also the voice command firing its
+    /// Completed event to do things properly
+    /// </summary>
+    /// <param name="taskInstance"></param>
     public async void Run(IBackgroundTaskInstance taskInstance)
     {
       var triggerDetails = taskInstance.TriggerDetails as AppServiceTriggerDetails;
@@ -21,8 +29,6 @@
       if (triggerDetails?.Name == "buildingCommandService")
       {
         var deferral = taskInstance.GetDeferral();
-
-        // TODO: come back and fix up cancellation here as we haven't got any.
 
         // Load up our stored local building configuration if not already loaded.
         if (BuildingPersistence.Instance == null)
@@ -53,7 +59,8 @@
         else
         {
           // Need to report an error
-          await ReportErrorAsync(voiceConnection, "the command name passed does not match across XML/code");
+          await ReportErrorAsync(voiceConnection, 
+            "the command name passed does not match across XML/code");
         }
         deferral.Complete();
       }
