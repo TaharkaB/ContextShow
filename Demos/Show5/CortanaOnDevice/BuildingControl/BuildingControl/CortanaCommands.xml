@@ -3,19 +3,45 @@
 
   <CommandSet xml:lang="en-gb">
 
-    <CommandPrefix>homecontrol</CommandPrefix>
+    <CommandPrefix>lighting</CommandPrefix>
 
-    <Example>show me the lights in the cottage</Example>
+    <Example>show me the lights in the house</Example>
 
     <Command Name="showLights">
       <Example>show me the lights in the house</Example>
-      <ListenFor>[show me the] lights in the {building}</ListenFor>
-      <Feedback>I'll get the app and ask it to find the {building} for you</Feedback>
+      <ListenFor>show me the lights in the {building}</ListenFor>
+      <ListenFor>show me the {building} lights</ListenFor>
+      <Feedback>showing the {building} lighting control for you now</Feedback>
+      
+      <!-- Target is not something we take any account of in our code -->
+      <Navigate Target="Anywhere.xaml"/>      
+    </Command>
+    
+    <Command Name="switchLights">
+      <Example>turn the house lights on</Example>
+      <ListenFor>[turn the] {building} lights {onOff}</ListenFor>
+      <ListenFor>turn {onOff} the lights in the {building}</ListenFor>
+      <ListenFor>[turn the] {room} lights {onOff} in the {building}</ListenFor>
+      <ListenFor>turn {onOff} the {room} lights in the {building}</ListenFor>
+      <Feedback>switching the {building} lights for you now</Feedback>
       
       <!-- Target is not something we take any account of in our code -->
       <Navigate Target="Anywhere.xaml"/>
-      
     </Command>
+
+    <Command Name="backgroundSwitchLights">
+      <Example>quietly turn the house lights on</Example>
+      <ListenFor>quietly [turn the] {building} lights {onOff}</ListenFor>
+      <ListenFor>quietly turn {onOff} the lights in the {building}</ListenFor>
+      <ListenFor>quietly [turn the] {room} lights {onOff} in the {building}</ListenFor>
+      <ListenFor>quietly turn {onOff} the {room} lights in the {building}</ListenFor>
+      <Feedback>quietly switching the {building} lights for you now</Feedback>
+
+      <!-- Target is not something we take any account of in our code -->
+      <VoiceCommandService Target="buildingCommandService"/>      
+   
+    </Command>
+       
     <!-- Note, these are statically set but we could dynamically rewrite them
          if we wanted to - just a bit more code in our app to do it. 
     -->
@@ -25,6 +51,16 @@
       <Item>Shed</Item>
       <Item>Caravan</Item>
       <Item>Garage</Item>
+    </PhraseList>
+    <PhraseList Label="room" Disambiguate="true">
+      <Item>Kitchen</Item>
+      <Item>Office</Item>
+      <Item>Lounge</Item>
+      <Item>Bathroom</Item>
+    </PhraseList>
+    <PhraseList Label="onOff" Disambiguate="true">
+      <Item>On</Item>
+      <Item>Off</Item>
     </PhraseList>
   </CommandSet>
 </VoiceCommands>

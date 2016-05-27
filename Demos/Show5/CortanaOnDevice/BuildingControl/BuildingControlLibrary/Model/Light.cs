@@ -28,7 +28,7 @@ namespace BuildingControl.Model
         {
           this.isOn = value;
 
-          this.syncContext.Post(
+          this.syncContext?.Post(
             _ =>
             {
               this.PropertyChanged?.Invoke(this,

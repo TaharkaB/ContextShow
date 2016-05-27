@@ -92,22 +92,15 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllJoyn\LightControlService.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LightBulb.xaml.cs">
       <DependentUpon>LightBulb.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\Building.cs" />
-    <Compile Include="Model\Light.cs" />
-    <Compile Include="Model\NamedObject.cs" />
-    <Compile Include="Model\Room.cs" />
-    <Compile Include="Model\RoomType.cs" />
     <Compile Include="Pages\MonitorPage.xaml.cs">
       <DependentUpon>MonitorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\AllJoynAvailableBuilding.cs" />
     <Compile Include="Pages\RoomDataViewModel.cs" />
     <Compile Include="Pages\SetupBuildingPage.xaml.cs">
       <DependentUpon>SetupBuildingPage.xaml</DependentUpon>
@@ -115,9 +108,7 @@
     <Compile Include="Pages\SetupRoomsPage.xaml.cs">
       <DependentUpon>SetupRoomsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PI\GpioPinLookup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\BuildingPersistence.cs" />
     <Compile Include="Services\Navigator.cs" />
     <Compile Include="Utility\BooleanVisibilityConverter.cs" />
     <Compile Include="Utility\RoomTypeToImageSourceConverter.cs" />
@@ -216,6 +207,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BackgroundComponent\BackgroundComponent.csproj">
+      <Project>{a872166a-8eea-4fac-8a5f-77d4f7950de7}</Project>
+      <Name>BackgroundComponent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BuildingControlLibrary\BuildingControlLibrary.csproj">
+      <Project>{a935e653-3c76-4bb3-af03-8a3cc3defb5a}</Project>
+      <Name>BuildingControlLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.taulty.LightControl\com.taulty.LightControl.vcxproj">
       <Project>{b0d57e0b-8441-4b1d-a36f-031175052d98}</Project>
       <Name>com.taulty.LightControl</Name>
@@ -226,6 +225,7 @@
       <Name>Windows IoT Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -10,7 +10,7 @@
   // This could/should be migrated into a proper service which is injected but,
   // for demo purposes, we just make it static here and use it where we need
   // it.
-  static class BuildingPersistence
+  public static class BuildingPersistence
   {
     public static Building Instance
     {
@@ -34,7 +34,7 @@
       }
       return (building);
     }
-    public static async Task SaveAsync(Building building)
+    public static async Task SaveAsync(Building building, bool fireDataChanged = false)
     {
       if (building != null)
       {
@@ -44,6 +44,8 @@
         var json = JsonConvert.SerializeObject(building);
 
         await FileIO.WriteTextAsync(file, json);
+
+        ApplicationData.Current.SignalDataChanged();
       }
     }
     static readonly string STORAGE_FILE = "building.dat";

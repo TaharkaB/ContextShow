@@ -1,6 +1,6 @@
 ﻿using Windows.Devices.AllJoyn;
 
-namespace BuildingControl.Pages
+namespace BuildingControl.Services
 {
   public class AllJoynRemoteBuilding
   {

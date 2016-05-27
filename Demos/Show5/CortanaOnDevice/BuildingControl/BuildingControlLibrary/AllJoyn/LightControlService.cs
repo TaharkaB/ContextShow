@@ -10,7 +10,7 @@
   using Windows.Devices.AllJoyn;
   using Windows.Foundation;
 
-  class LightControlService : ILightControlService
+  public class LightControlService : ILightControlService
   {
     public IAsyncOperation<LightControlGetBuildingDefinitionJsonResult> GetBuildingDefinitionJsonAsync(
       AllJoynMessageInfo info)

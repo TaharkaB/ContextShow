@@ -1,6 +1,6 @@
 ﻿namespace BuildingControl.PI
 {
-  static class GpioPinLookup
+  public static class GpioPinLookup
   {
     public static int GetGpioPinIndexForOrdinal(int ordinal)
     {

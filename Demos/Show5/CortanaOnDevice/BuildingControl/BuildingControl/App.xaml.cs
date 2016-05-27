@@ -1,6 +1,10 @@
-﻿using BuildingControl.Pages;
+﻿using BuildingControl.Model;
+using BuildingControl.Pages;
 using BuildingControl.Services;
+using BuildingControlLibrary.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -91,30 +95,38 @@ namespace BuildingControl
       {
         // Create the UI. We assume that the configuration has been done
         // before any voice commands are issued. Wouldn't be ok for a real
-        // app but is ok for us.
+        // app but it's ok for us.
         await CreateUIAndLoadBuildingDataAsync(false);
 
-        VoiceCommandActivatedEventArgs voiceArgs = 
+        VoiceCommandActivatedEventArgs voiceArgs =
           (VoiceCommandActivatedEventArgs)args;
 
         // Which rule were we invoked with?
-        var rulePath = voiceArgs.Result.RulePath;
+        BuildingCommandDetails commandDetails =
+          BuildingVoiceCommandParser.Parse(voiceArgs.Result);
 
-        if (rulePath.Count > 0)
+        if (!string.IsNullOrEmpty(commandDetails?.RulePath))
         {
-          switch (rulePath[0])
+          if ((commandDetails.RulePath == "switchLights") || 
+              (commandDetails.RulePath == "showLights") &&
+              !string.IsNullOrEmpty(commandDetails.Building))
           {
-            case "showLights":
-              var building =
-                voiceArgs.Result.SemanticInterpretation.Properties["building"][0];
-
-              if (!string.IsNullOrEmpty(building))
-              {
-                await MonitorPage.Instance.SwitchToBuildingAsync(building);
-              }
-              break;
-            default:
-              break;
+            await MonitorPage.Instance.SwitchToBuildingAsync(commandDetails.Building);
+          }
+          if ((commandDetails.Building == "switchLights") &&
+              (commandDetails.OnOff.HasValue))
+          {
+            if (string.IsNullOrEmpty(commandDetails.Room))
+            {
+              await MonitorPage.Instance.SwitchLightsInBuildingAsync(
+                commandDetails.OnOff.Value);
+            }
+            else
+            {
+              await MonitorPage.Instance.SwitchLightsInRoomAsync(
+                (RoomType)Enum.Parse(typeof(RoomType), commandDetails.Room),
+                commandDetails.OnOff.Value);
+            }
           }
         }
       }

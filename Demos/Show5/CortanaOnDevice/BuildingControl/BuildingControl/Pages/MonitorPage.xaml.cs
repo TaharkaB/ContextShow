@@ -1,23 +1,25 @@
 ﻿namespace BuildingControl.Pages
 {
-  using System;
-  using Services;
-  using Windows.UI.Xaml.Controls;
-  using System.Threading.Tasks;
-  using Windows.Devices.AllJoyn;
-  using com.taulty.LightControl;
   using AllJoyn;
-  using Windows.UI.Xaml.Navigation;
+  using BuildingControlLibrary.Services;
+  using com.taulty.LightControl;
   using Controls;
   using Model;
-  using Windows.UI.Xaml;
-  using Windows.UI.Xaml.Input;
-  using System.Collections.Concurrent;
-  using System.Collections.ObjectModel;
   using Newtonsoft.Json;
+  using Services;
+  using System;
+  using System.Collections.ObjectModel;
   using System.ComponentModel;
-  using System.Runtime.CompilerServices;
   using System.Linq;
+  using System.Runtime.CompilerServices;
+  using System.Threading.Tasks;
+  using Windows.Devices.AllJoyn;
+  using Windows.Storage;
+  using Windows.UI.Xaml;
+  using Windows.UI.Xaml.Controls;
+  using Windows.UI.Xaml.Input;
+  using Windows.UI.Xaml.Navigation;
+
   public sealed partial class MonitorPage : Page, INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler PropertyChanged;
@@ -30,21 +32,10 @@
     public MonitorPage()
     {
       this.InitializeComponent();
+
+      ApplicationData.Current.DataChanged += OnDataChanged;
+
       Instance = this;
-    }
-    protected async override void OnNavigatedTo(NavigationEventArgs e)
-    {
-      base.OnNavigatedTo(e);
-
-      this.isLocalBuilding = true;
-
-      this.RemoteBuildings = new ObservableCollection<AllJoynRemoteBuilding>();
-
-      this.currentBuilding = BuildingPersistence.Instance;
-
-      this.DataContext = this;
-
-      await this.StartAllJoynActivityAsync();
     }
     public Building Building
     {
@@ -57,61 +48,91 @@
         this.SetProperty(ref this.currentBuilding, value);
       }
     }
-    public ObservableCollection<AllJoynRemoteBuilding> RemoteBuildings
+    public ObservableCollection<string> RemoteBuildings
     {
       get; set;
     }
-    async Task StartAllJoynActivityAsync()
+    public async Task SwitchLightsInBuildingAsync(bool onOff)
     {
-      this.CreateBusAttachments();
-
-      this.lightControlWatcher = new LightControlWatcher(this.watchingBusAttachment);
-      this.lightControlWatcher.Added += OnLightControlAdded;
-      this.lightControlWatcher.Start();
-
-      this.lightService = new LightControlService();
-
-      this.lightControlProducer = new LightControlProducer(this.advertisingBusAttachment)
+      foreach (var room in this.currentBuilding.Rooms)
       {
-        Service = this.lightService
-      };
-      this.lightControlProducer.Start();
-    }
-    async void OnLightControlAdded(LightControlWatcher sender, AllJoynServiceInfo args)
-    {
-      // TBD: my way of trying to avoid connecting back to ourselves.
-      if (this.advertisingBusAttachment.UniqueName != args.UniqueName)
-      {
-        AllJoynAboutDataView advertisementMetadata =
-          await AllJoynAboutDataView.GetDataBySessionPortAsync(
-            args.UniqueName, this.watchingBusAttachment, args.SessionPort);
-
-        var buildingName = advertisementMetadata.AppName;
-
-        await this.Dispatch(
-          () =>
-          {
-            if (!this.RemoteBuildings.Any(b => b.Name == buildingName))
-            {
-              this.RemoteBuildings.Add(new AllJoynRemoteBuilding()
-              {
-                Name = buildingName,
-                AllJoynInfo = args
-              });
-            }
-          }
-        );
+        await this.SwitchLightsInRoomAsync(room, onOff);
       }
     }
-    void CreateBusAttachments()
+    public async Task SwitchLightsInRoomAsync(RoomType roomType,
+      bool onOff)
+    {
+      var room = this.Building.Rooms.SingleOrDefault(
+        r => r.RoomType == roomType);
+
+      if (room != null)
+      {
+        await this.SwitchLightsInRoomAsync(room, onOff);
+      }
+    }
+    internal async Task SwitchToBuildingAsync(string building)
+    {
+      // This one is a bit tricky. We might just be starting up and waiting
+      // for AllJoyn notifications that there are other buildings out there
+      // and so there's a slew of race conditions here.
+      if (building == BuildingPersistence.Instance.Name)
+      {
+        // NB: this doesn't switch if it doesn't need to.
+        this.OnSwitchToLocalBuilding();
+      }
+      else
+      {
+        // We're in an interesting situation as we may have just spun the
+        // page up and it's listening for remote buildings to come in and
+        // so we give it a little time to see if that happens and, if not,
+        // we leave well alone.
+        await this.SwitchToRemoteBuildingAsync(building, 10);
+      }
+    }
+    protected override void OnNavigatedTo(NavigationEventArgs e)
+    {
+      base.OnNavigatedTo(e);
+
+      this.isLocalBuilding = true;
+
+      this.RemoteBuildings = new ObservableCollection<string>();
+
+      this.currentBuilding = BuildingPersistence.Instance;
+
+      this.DataContext = this;
+
+      this.StartAllJoynActivity();
+    }
+    void StartAllJoynActivity()
+    {
+      this.CreateBusAttachmentForAdvertisement();
+
+      this.lightControlProducer = new LightControlProducer(
+        this.advertisingBusAttachment)
+      {
+        Service = new LightControlService()
+      };
+      this.lightControlProducer.Start();
+
+      RemoteLightControlManager.LightControlDiscovered += OnBuildingDiscovered;
+
+      RemoteLightControlManager.Initialise(BuildingPersistence.Instance.Name);
+    }
+
+    async void OnBuildingDiscovered(object sender, LightControlDiscoveredEventArgs e)
+    {
+      await this.Dispatch(
+        () =>
+        {
+          this.RemoteBuildings.Add(e.BuildingName);
+        }
+      );
+    }
+    void CreateBusAttachmentForAdvertisement()
     {
       this.advertisingBusAttachment = new AllJoynBusAttachment();
-      this.watchingBusAttachment = new AllJoynBusAttachment();
-
       this.advertisingBusAttachment.AboutData.DateOfManufacture = DateTime.Now;
-
       this.advertisingBusAttachment.AboutData.DefaultAppName = BuildingPersistence.Instance.Name;
-
       this.advertisingBusAttachment.AboutData.DefaultDescription = "Manages lighting";
       this.advertisingBusAttachment.AboutData.DefaultManufacturer = "Mike Taulty";
       this.advertisingBusAttachment.AboutData.ModelNumber = "Model 1";
@@ -132,7 +153,7 @@
       }
       else
       {
-        await this.lightControlConsumer?.ToggleRoomLightAsync(
+        await this.currentConsumer?.ToggleRoomLightAsync(
           light.Room.ToString(), light.Id);
       }
       e.Handled = true;
@@ -145,16 +166,9 @@
     {
       await this.SwitchLightsInBuildingAsync(false);
     }
-    async Task SwitchLightsInBuildingAsync(bool onOff)
-    {
-      foreach (var room in this.currentBuilding.Rooms)
-      {
-        await this.SwitchLightsInRoomAsync(room, onOff);
-      }
-    }
     async void OnUISwitchRoomOn(object sender, RoutedEventArgs e)
     {
-      // code that only a mother could love.
+      // code that only a mother could love, sorry!
       var room = (Room)(((Button)sender).Tag);
       await this.SwitchLightsInRoomAsync(room, true);
     }
@@ -173,7 +187,7 @@
       }
       else
       {
-        await this.lightControlConsumer?.SwitchRoomAsync(
+        await this.currentConsumer?.SwitchRoomAsync(
           room.RoomType.ToString(),
           onOff);
       }
@@ -182,42 +196,56 @@
     {
       if (lstOtherBuildings.SelectedItem != null)
       {
-        var otherBuilding = (AllJoynRemoteBuilding)lstOtherBuildings.SelectedItem;
+        var otherBuilding = (string)lstOtherBuildings.SelectedItem;
 
         await SwitchToRemoteBuildingAsync(otherBuilding);
       }
     }
-    async Task SwitchToRemoteBuildingAsync(AllJoynRemoteBuilding otherBuilding)
+    async Task SwitchToRemoteBuildingAsync(string otherBuilding,
+      int timeoutInSeconds = 0)
     {
-      var result = await LightControlConsumer.JoinSessionAsync(
-        otherBuilding.AllJoynInfo,
-        this.lightControlWatcher);
+      this.currentConsumer =
+        await RemoteLightControlManager.GetConsumerForRemoteBuildingAsync(
+          otherBuilding,
+          timeoutInSeconds);
 
-      if (result.Status == AllJoynStatus.Ok)
+      var json = await this.currentConsumer.GetBuildingDefinitionJsonAsync();
+
+      if (json.Status == AllJoynStatus.Ok)
       {
-        this.lightControlConsumer = result.Consumer;
+        var building = JsonConvert.DeserializeObject<Building>(json.Json);
 
-        var json = await this.lightControlConsumer.GetBuildingDefinitionJsonAsync();
+        this.Building = building;
 
-        if (json.Status == AllJoynStatus.Ok)
-        {
-          var building = JsonConvert.DeserializeObject<Building>(json.Json);
-          this.Building = building;
-
-          this.isLocalBuilding = false;
-        }
+        this.isLocalBuilding = false;
       }
     }
-
     void OnSwitchToLocalBuilding()
     {
       if (!this.isLocalBuilding)
       {
-        this.lightControlConsumer?.Dispose();
-        this.lightControlConsumer = null;
+        this.currentConsumer = null;
         this.isLocalBuilding = true;
         this.Building = BuildingPersistence.Instance;
       }
+    }
+    async void OnDataChanged(ApplicationData sender, object args)
+    {
+      await this.Dispatch(
+        async () =>
+        {
+          // Something has written our data file so we should reread it.
+          BuildingPersistence.Instance = await BuildingPersistence.LoadAsync();
+
+          // If we are showing that building on the screen then we need to refresh.
+          if (this.isLocalBuilding)
+          {
+            // to ensure change notification fires.
+            this.Building = null;
+            this.Building = BuildingPersistence.Instance;
+          }
+        }
+      );
     }
     void OnUISwitchToLocalBuilding(object sender, RoutedEventArgs e)
     {
@@ -234,11 +262,8 @@
     }
     void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-      var eventHandler = this.PropertyChanged;
-      if (eventHandler != null)
-      {
-        eventHandler(this, new PropertyChangedEventArgs(propertyName));
-      }
+      this.PropertyChanged?.Invoke(
+        this, new PropertyChangedEventArgs(propertyName));
     }
     async Task Dispatch(Action action)
     {
@@ -250,46 +275,10 @@
         }
       );
     }
-    internal async Task SwitchToBuildingAsync(string building)
-    {
-      // This one is a bit tricky. We might just be starting up and waiting
-      // for AllJoyn notifications that there are other buildings out there
-      // and so there's a slew of race conditions here.
-      if (building == this.Building.Name)
-      {
-        // NB: this doesn't switch if it doesn't need to.
-        this.OnSwitchToLocalBuilding();
-      }
-      else
-      {
-        // We're in an interesting situation as we may have just spun the
-        // page up and it's listening for remote buildings to come in and
-        // so we give it a little time to see if that happens and, if not,
-        // we leave well alone.
-        for (int i = 0; i < ARBITRARY_RETRY_COUNT; i++)
-        {
-          // Do we already know this remote building?
-          var remoteBuilding =
-            this.RemoteBuildings.FirstOrDefault(b => b.Name == building);
-
-          if (remoteBuilding != null)
-          {
-            await this.SwitchToRemoteBuildingAsync(remoteBuilding);
-            break;
-          }
-          await Task.Delay(TimeSpan.FromSeconds(ARBITRARY_RETRY_DELAY));
-        }
-      }
-    }
-    const int ARBITRARY_RETRY_COUNT = 3;
-    const int ARBITRARY_RETRY_DELAY = 5;
     bool isLocalBuilding;
     Building currentBuilding;
-    LightControlService lightService;
     LightControlProducer lightControlProducer;
-    LightControlWatcher lightControlWatcher;
     AllJoynBusAttachment advertisingBusAttachment;
-    AllJoynBusAttachment watchingBusAttachment;
-    LightControlConsumer lightControlConsumer;
+    LightControlConsumer currentConsumer;
   }
 }

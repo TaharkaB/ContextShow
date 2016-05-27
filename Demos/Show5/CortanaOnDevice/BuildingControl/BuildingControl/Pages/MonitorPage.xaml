@@ -188,7 +188,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextBlock
-                            Text="{Binding Name}" />
+                            Text="{Binding}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
