@@ -1,0 +1,131 @@
+﻿<Page
+    x:Class="LocationBasics.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LocationBasics"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:map="using:Windows.UI.Xaml.Controls.Maps">
+
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup
+                x:Name="VisualStateGroup">
+                <VisualState
+                    x:Name="_default" />
+                <VisualState
+                    x:Name="located">
+                    <VisualState.Setters>
+                        <Setter
+                            Target="button.(UIElement.Visibility)"
+                            Value="Collapsed" />
+                        <Setter
+                            Target="mapControl.(UIElement.Visibility)"
+                            Value="Visible" />
+                        <Setter
+                            Target="stackAddress.(UIElement.Visibility)"
+                            Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <map:MapControl
+            x:Name="mapControl"
+            ZoomLevel="14"
+            LandmarksVisible="True"
+            DesiredPitch="65"
+            MapServiceToken="07nnZ2CDfipUmgUmJ4eD~7YH9TgCfVU9SwrbY2Z8z_Q~ApOigDmzgqkSdBX8eWKNN1tX8MKCbFeGKTWxP5GBtQwzKYUfFhtZaMJ9biQyoCW8"
+            PedestrianFeaturesVisible="True"
+            BusinessLandmarksVisible="True"
+            TrafficFlowVisible="True"
+            Visibility="Collapsed">
+
+        </map:MapControl>
+        <Button
+            x:Name="button"
+            Template="{x:Null}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Grid.RowSpan="2"
+            Click="OnLocateButtonClick">
+            <StackPanel>
+                <Grid>
+                    <Ellipse
+                        Width="100"
+                        Height="100"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Stroke="CornflowerBlue"
+                        StrokeThickness="10" />
+                    <Ellipse
+                        Width="50"
+                        Height="50"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Fill="SkyBlue" />
+                </Grid>
+                <TextBlock
+                    Grid.Row="1"
+                    Text="locate me..."
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    TextAlignment="Center"
+                    FontSize="18">
+                </TextBlock>
+            </StackPanel>
+        </Button>
+        <StackPanel
+            Grid.Row="1"
+            x:Name="stackAddress"
+            Visibility="Collapsed"
+            VerticalAlignment="Center">
+            <StackPanel.Resources>
+                <Style
+                    TargetType="TextBlock">
+                    <Style.Setters>
+                        <Setter
+                            Property="Margin"
+                            Value="4" />
+                        <Setter
+                            Property="FontFamily"
+                            Value="Segoe UI Light" />
+                        <Setter
+                            Property="FontSize"
+                            Value="20" />
+                        <Setter
+                            Property="TextAlignment"
+                            Value="Center" />
+                        <Setter
+                            Property="HorizontalAlignment"
+                            Value="Center" />
+                    </Style.Setters>
+                </Style>
+            </StackPanel.Resources>
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="24"
+                Text="what I found" 
+                Margin="8"
+                Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+            <TextBlock
+                Text="{Binding StreetNumber,FallbackValue='no number'}" />
+            <TextBlock
+                Text="{Binding Street,FallbackValue='no street'}" />
+            <TextBlock
+                Text="{Binding Town, FallbackValue='no town'}" />
+            <TextBlock
+                Text="{Binding District, FallbackValue='no district'}" />
+            <TextBlock
+                Text="{Binding City, FallbackValue='no city'}" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                Text="{Binding PostCode, FallbackValue='no post code'}" />
+        </StackPanel>
+    </Grid>
+</Page>
