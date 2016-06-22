@@ -88,6 +88,7 @@
             var dialog = new MessageDialog(message);
             await dialog.ShowAsync();
         }
-        static readonly string mapControlKey = "07nnZ2CDfipUmgUmJ4eD~7YH9TgCfVU9SwrbY2Z8z_Q~ApOigDmzgqkSdBX8eWKNN1tX8MKCbFeGKTWxP5GBtQwzKYUfFhtZaMJ9biQyoCW8";
-    }
+	#error MAP KEY MISSING
+        static readonly string mapControlKey = "";
+   }
 }
