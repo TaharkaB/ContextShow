@@ -1,0 +1,110 @@
+﻿<Page
+    x:Class="ActivitySensorCode.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ActivitySensorCode"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.Resources>
+            <local:ActivityTypeImageConverter
+                x:Name="activityConverter" />
+            <local:DateTimeOffsetFormatter
+                x:Name="formatter" />
+            <Style
+                TargetType="TextBlock">
+                <Style.Setters>
+                    <Setter
+                        Property="Margin"
+                        Value="4" />
+                    <Setter
+                        Property="FontFamily"
+                        Value="Segoe UI Light" />
+                    <Setter
+                        Property="FontSize"
+                        Value="20" />
+                    <Setter
+                        Property="TextAlignment"
+                        Value="Center" />
+                    <Setter
+                        Property="HorizontalAlignment"
+                        Value="Center" />
+                </Style.Setters>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid
+            Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
+            <Image
+                x:Name="activityImage"
+                Stretch="Uniform"
+                Margin="4" />
+            <StackPanel Grid.Row="1" Margin="4">
+                <TextBlock
+                    x:Name="txtActivity"
+                    TextAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                <TextBlock
+                    x:Name="txtActivityDetails"
+                    TextAlignment="Center"
+                    FontSize="16"
+                    HorizontalAlignment="Center" />
+            </StackPanel>
+        </Grid>
+        <ListView
+            Grid.Row="1"
+            Margin="8"
+            Header="Last Week of Activity"
+            ItemsSource="{Binding ActivityHistory}">
+            <ListView.ItemContainerStyle>
+                <Style
+                    TargetType="ListViewItem">
+                    <Setter
+                        Property="HorizontalContentAlignment"
+                        Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Background="#FF101010" Margin="0,0,0,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="7*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Image
+                            Margin="2"
+                            Source="{Binding Activity, Converter={StaticResource activityConverter}}"
+                            Stretch="Uniform"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
+                        <TextBlock
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Margin="8,0,0,0">
+                            <Run
+                                Text="{Binding Timestamp, Converter={StaticResource formatter},ConverterParameter='dd MMM,hh.mm:'}" />                            
+                            <Run
+                                Text="{Binding Activity}" />
+                        </TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>
