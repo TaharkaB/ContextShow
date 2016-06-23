@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundSensors", "BackgroundSensors\BackgroundSensors.csproj", "{661AEE69-A1B9-4D47-BF37-5A0614859A25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundLibrary", "BackgroundLibrary\BackgroundLibrary.csproj", "{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Debug|ARM.ActiveCfg = Debug|ARM
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Debug|ARM.Build.0 = Debug|ARM
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Debug|ARM.Deploy.0 = Debug|ARM
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Debug|x64.ActiveCfg = Debug|x64
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Debug|x64.Build.0 = Debug|x64
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Debug|x64.Deploy.0 = Debug|x64
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Debug|x86.ActiveCfg = Debug|x86
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Debug|x86.Build.0 = Debug|x86
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Debug|x86.Deploy.0 = Debug|x86
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Release|Any CPU.ActiveCfg = Release|x86
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Release|ARM.ActiveCfg = Release|ARM
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Release|ARM.Build.0 = Release|ARM
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Release|ARM.Deploy.0 = Release|ARM
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Release|x64.ActiveCfg = Release|x64
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Release|x64.Build.0 = Release|x64
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Release|x64.Deploy.0 = Release|x64
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Release|x86.ActiveCfg = Release|x86
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Release|x86.Build.0 = Release|x86
+		{661AEE69-A1B9-4D47-BF37-5A0614859A25}.Release|x86.Deploy.0 = Release|x86
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Debug|ARM.ActiveCfg = Debug|ARM
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Debug|ARM.Build.0 = Debug|ARM
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Debug|x64.ActiveCfg = Debug|x64
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Debug|x64.Build.0 = Debug|x64
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Debug|x86.ActiveCfg = Debug|x86
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Debug|x86.Build.0 = Debug|x86
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Release|ARM.ActiveCfg = Release|ARM
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Release|ARM.Build.0 = Release|ARM
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Release|x64.ActiveCfg = Release|x64
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Release|x64.Build.0 = Release|x64
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Release|x86.ActiveCfg = Release|x86
+		{9D1A2719-C531-4AC8-BD4B-B1AE18CAEAA1}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
