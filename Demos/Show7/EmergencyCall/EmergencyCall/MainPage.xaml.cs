@@ -3,6 +3,7 @@
   using CommonLibrary;
   using Microsoft.Band;
   using Microsoft.Band.Tiles;
+  using Microsoft.Band.Tiles.Pages;
   using System;
   using System.Linq;
   using System.Threading.Tasks;
@@ -78,16 +79,10 @@
     {
       await this.Dispatcher.RunAsync(
         Windows.UI.Core.CoreDispatcherPriority.Normal,
-        async () =>
+        () =>
         {
           if (e.TileEvent.TileId == this.bandTile.TileId)
           {
-            // Display a message on the band.
-            await this.client.NotificationManager.ShowDialogAsync(
-              this.bandTile.TileId,
-              "Ringing",
-              "Ringing now");
-
             // We make our call. This is hard-coded for now.
             var line = AccessoryManager.PhoneLineDetails.FirstOrDefault();
 
@@ -115,15 +110,30 @@
         var largeIcon = await TileImageUtility.MakeTileIconFromFileAsync(
           new Uri("ms-appx:///Assets/tileLarge.png"), 48);
 
-        var tileGuid = Guid.NewGuid();        
+        var tileGuid = Guid.NewGuid();
 
+        var layout = new TileLayout();
+             
         bandTile = new BandTile(tileGuid)
         {
           Name = "Emergency",
           TileIcon = largeIcon,
           SmallIcon = smallIcon
         };
+        bandTile.PageLayouts.Add(layout.Layout);
+
+        await layout.LoadIconsAsync(bandTile);
+
         var added = await this.client.TileManager.AddTileAsync(bandTile);
+
+        PageData pageData = new PageData(
+          Guid.NewGuid(),
+          0,
+          layout.Data.All);
+
+        await this.client.TileManager.SetPagesAsync(
+          bandTile.TileId,
+          pageData);
 
         // TBD: I've had this working in the past but on the current bits
         // my background events are not firing.

@@ -90,6 +90,10 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
+    <None Include="TileLayout.msbtl">
+      <Generator>MSBandLayoutCodeGenerator</Generator>
+      <LastGenOutput>TileLayout.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -100,6 +104,11 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TileImageUtility.cs" />
+    <Compile Include="TileLayout.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TileLayout.msbtl</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -110,6 +119,7 @@
   <ItemGroup>
     <Content Include="Assets\ok.png" />
     <Content Include="Assets\calling.png" />
+    <Content Include="Assets\smallCalling.png" />
     <Content Include="Assets\tileLarge.png" />
     <Content Include="Assets\tileSmall.png" />
     <Content Include="Properties\Default.rd.xml" />

@@ -3,12 +3,10 @@
   using CommonLibrary;
   using Microsoft.Band;
   using Microsoft.Band.Tiles;
-  using NotificationsExtensions.Toasts;
   using System.Linq;
   using Windows.ApplicationModel.AppService;
   using Windows.ApplicationModel.Background;
   using Windows.Phone.Notification.Management;
-  using Windows.UI.Notifications;
   public sealed class BackgroundTask
   {
     static readonly string BAND_OBSERVER_SERVICE_NAME = "com.microsoft.band.observer";

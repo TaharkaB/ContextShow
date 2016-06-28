@@ -1,0 +1,92 @@
+{
+  "$type": "DesignerContents",
+  "DesignerState": {
+    "$type": "DesignerState",
+    "BandLayout": {
+      "$type": "BandLayout",
+      "Version": {
+        "$type": "Version",
+        "Major": 2,
+        "Build": -1,
+        "Revision": -1
+      },
+      "BandTheme": {
+        "$type": "Theme",
+        "Base": "R: 51, G: 102, B: 204",
+        "HighContrast": "R: 58, G: 120, B: 221",
+        "Highlight": "R: 58, G: 120, B: 221",
+        "Lowlight": "R: 49, G: 101, B: 186",
+        "Muted": "R: 43, G: 90, B: 165",
+        "SecondaryText": "R: 137, G: 151, B: 171"
+      },
+      "TileTheme": {
+        "$type": "Theme",
+        "Base": "R: 51, G: 102, B: 204",
+        "HighContrast": "R: 58, G: 120, B: 221",
+        "Highlight": "R: 58, G: 120, B: 221",
+        "Lowlight": "R: 49, G: 101, B: 186",
+        "Muted": "R: 43, G: 90, B: 165",
+        "SecondaryText": "R: 137, G: 151, B: 171"
+      },
+      "RootPanel": {
+        "$type": "FilledPanel",
+        "Elements": {
+          "$type": "Elements",
+          "$values": [
+            {
+              "$type": "TextBlock",
+              "AutoWidth": true,
+              "Color": "R: 255, G: 255, B: 255",
+              "Text": "calling now",
+              "Name": "",
+              "ElementId": 4,
+              "Id": "ede003fc-a3c2-43c6-a19a-a6772968e1c7",
+              "Left": 24,
+              "Top": 57,
+              "Width": 32,
+              "Height": 32
+            },
+            {
+              "$type": "TextBlock",
+              "AutoWidth": true,
+              "Color": "R: 255, G: 255, B: 255",
+              "Text": "Do Not Panic",
+              "Name": "",
+              "ElementId": 3,
+              "Id": "ad5db2fa-a3ac-4546-b6fa-507b62733c92",
+              "Left": 23,
+              "Top": 30,
+              "Width": 32,
+              "Height": 32
+            },
+            {
+              "$type": "Icon",
+              "ColorSource": 2,
+              "Color": "R: 255, G: 255, B: 255",
+              "Source": "Assets/smallCalling.png",
+              "Name": "",
+              "ElementId": 2,
+              "Id": "b451fefc-89ee-40ef-be5b-264ca1778c59",
+              "Left": 193,
+              "Top": 55,
+              "Width": 64,
+              "Height": 64
+            }
+          ]
+        },
+        "Name": "",
+        "ElementId": 1,
+        "Id": "37d2bc13-935d-418e-8861-5133beca0760",
+        "Width": 258,
+        "Height": 128
+      }
+    },
+    "SelectedElements": {
+      "$type": "IdList",
+      "$values": [
+        "ede003fc-a3c2-43c6-a19a-a6772968e1c7"
+      ]
+    }
+  },
+  "ZoomPercent": 200.0
+}
