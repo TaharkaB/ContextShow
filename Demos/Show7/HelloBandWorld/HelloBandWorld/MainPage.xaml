@@ -1,0 +1,128 @@
+﻿<Page
+    x:Class="HelloBandWorld.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HelloBandWorld"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <Style
+            TargetType="TextBlock">
+            <Setter
+                Property="FontSize"
+                Value="22" />
+        </Style>
+    </Page.Resources>
+
+    <!-- setting this to black because the designer doesn't show me the
+         theme correctly.
+    -->
+    <Grid
+        Background="Black">
+        <Grid x:Name="gridConnect">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ListView
+                x:Name="listViewBands"
+                Grid.Row="0"
+                ItemsSource="{Binding}"
+                Header="Available Bands"
+                SelectionMode="Single"
+                FontSize="24">
+                <ListView.ItemContainerStyle>
+                    <Style
+                        TargetType="ListViewItem">
+                        <Setter
+                            Property="HorizontalContentAlignment"
+                            Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            Height="Auto"
+                            Margin="4,8,4,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Rectangle
+                                Height="48"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Fill="#FF222222" />
+                            <TextBlock
+                                Margin="4"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name}" />
+                            <Rectangle
+                                Grid.Column="1"
+                                Height="48"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Fill="#FF333333" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Margin="4"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                TextAlignment="Center"
+                                Text="{Binding ConnectionType}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button
+                HorizontalAlignment="Stretch"
+                Grid.Row="1"
+                Content="Connect"
+                Margin="4"
+                FontSize="20"
+                Click="OnConnectToSelectedBand" />
+        </Grid>
+        <Grid
+            x:Name="gridDisplay"
+            Visibility="Collapsed">
+            <ListView
+                Margin="4"
+                SelectionMode="None"
+                FontSize="24"
+                Header="Sensor Data"
+                ItemsSource="{Binding}">
+                <ListView.ItemContainerStyle>
+                    <Style
+                        TargetType="ListViewItem">
+                        <Setter
+                            Property="HorizontalContentAlignment"
+                            Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="4,8,4,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Text="{Binding Name}" 
+                                Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                FontSize="20"/>
+                            <TextBlock
+                                Grid.Row="1"
+                                FontSize="16"
+                                TextWrapping="Wrap"
+                                MaxLines="5"
+                                Text="{Binding Value,Mode=OneWay,FallbackValue='no value',TargetNullValue='no value'}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+</Page>
