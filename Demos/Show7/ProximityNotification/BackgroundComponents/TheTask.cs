@@ -63,8 +63,8 @@
             VibrationType.NotificationOneTone);
 
           // display the data from the beacon (or as much as we can)
-          await bandClient.NotificationManager.ShowDialogAsync(
-            TileIdentifier, "Spotted a Beacon", message);
+          await bandClient.NotificationManager.SendMessageAsync(
+            TileIdentifier, "Spotted a Beacon", message, DateTimeOffset.Now);
         }
       }
     }
