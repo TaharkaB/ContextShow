@@ -23,8 +23,15 @@
     {
       base.OnNavigatedTo(e);
 
+      // We always do this part.
       AccessoryManager.RegisterAccessoryApp();
-      await this.GetOrCreateTileAsync();
+
+      this.SetButtonContent();
+    }
+    void SetButtonContent()
+    {
+      this.btnRegister.Content =
+        (TileGuidSetting == null) ? "Register" : "Unregister";
     }
     static Guid? TileGuidSetting
     {
@@ -53,54 +60,61 @@
         }
       }
     }
-    async Task GetOrCreateTileAsync()
+    async void OnRegisterButtonClick(object sender, RoutedEventArgs e)
     {
-      var bands = await BandClientManager.Instance.GetBandsAsync();
-
-      if (bands?.Count() > 0)
+      if (TileGuidSetting == null)
       {
-        this.client = await BandClientManager.Instance.ConnectAsync(bands.First());
-      }
-
-      if (TileGuidSetting.HasValue)
-      {
-        var allTiles = await this.client.TileManager.GetTilesAsync();
-        this.bandTile = allTiles.Single(t => t.TileId == TileGuidSetting.Value);
+        await this.RegisterAsync();
       }
       else
       {
-        this.bandTile = await CreateTileAsync();
+        await this.UnregisterAsync();
       }
-      this.client.TileManager.TileOpened += OnTileOpened;
-      await this.client.TileManager.StartReadingsAsync();
+      this.SetButtonContent();
     }
-    async void OnTileOpened(
-      object sender, BandTileEventArgs<IBandTileOpenedEvent> e)
+    async Task RegisterAsync()
     {
-      await this.Dispatcher.RunAsync(
-        Windows.UI.Core.CoreDispatcherPriority.Normal,
-        () =>
-        {
-          if (e.TileEvent.TileId == this.bandTile.TileId)
-          {
-            // We make our call. This is hard-coded for now.
-            var line = AccessoryManager.PhoneLineDetails.FirstOrDefault();
+      using (var client = await this.GetClientForFirstBandAsync())
+      {
+        var tileGuid = await CreateTileAsync(client);
 
-            if (line != null)
-            {
-              this.okGrid.Visibility = Visibility.Collapsed;
-              this.ringingGrid.Visibility = Visibility.Visible;
-              AccessoryManager.MakePhoneCall(line.LineId, Constants.PhoneNumber);
-            }
-          }
-        }
-      );
+        // Note: we can also subscribe to tile events in the foreground
+        // but this scenario makes more sense in the background.
+        await client.SubscribeToBackgroundTileEventsAsync(
+          tileGuid);
+
+        TileGuidSetting = tileGuid;
+      }
     }
-    async Task<BandTile> CreateTileAsync()
+    async Task UnregisterAsync()
+    {
+      using (var client = await this.GetClientForFirstBandAsync())
+      {
+        await RemoveTileAsync(client);
+
+        await client.UnsubscribeFromBackgroundTileEventsAsync(
+          TileGuidSetting.Value);
+
+        TileGuidSetting = null;
+      }
+    }
+    async Task<IBandClient> GetClientForFirstBandAsync()
+    {
+      var bands = await BandClientManager.Instance.GetBandsAsync();
+      IBandClient client = null;
+
+      if (bands?.Count() > 0)
+      {
+        client = await BandClientManager.Instance.ConnectAsync(bands.First());
+      }
+      return (client);
+    }
+    async Task<Guid> CreateTileAsync(IBandClient client)
     {
       BandTile bandTile = null;
+      Guid tileGuid = Guid.NewGuid();
 
-      var tileSpace = await this.client.TileManager.GetRemainingTileCapacityAsync();
+      var tileSpace = await client.TileManager.GetRemainingTileCapacityAsync();
 
       if (tileSpace > 0)
       {
@@ -110,10 +124,8 @@
         var largeIcon = await TileImageUtility.MakeTileIconFromFileAsync(
           new Uri("ms-appx:///Assets/tileLarge.png"), 48);
 
-        var tileGuid = Guid.NewGuid();
-
         var layout = new TileLayout();
-             
+
         bandTile = new BandTile(tileGuid)
         {
           Name = "Emergency",
@@ -124,40 +136,25 @@
 
         await layout.LoadIconsAsync(bandTile);
 
-        var added = await this.client.TileManager.AddTileAsync(bandTile);
+        var added = await client.TileManager.AddTileAsync(bandTile);
 
         PageData pageData = new PageData(
           Guid.NewGuid(),
           0,
           layout.Data.All);
 
-        await this.client.TileManager.SetPagesAsync(
+        await client.TileManager.SetPagesAsync(
           bandTile.TileId,
           pageData);
-
-        // TBD: I've had this working in the past but on the current bits
-        // my background events are not firing.
-        await this.client.SubscribeToBackgroundTileEventsAsync(tileGuid);
-
-        TileGuidSetting = tileGuid;
       }
-      return (bandTile);
+      return (tileGuid);
+    }
+    async Task RemoveTileAsync(IBandClient client)
+    {
+      var bandTiles = await client.TileManager.GetTilesAsync();
+      var bandTile = bandTiles.Single(b => b.TileId == TileGuidSetting);
+      await client.TileManager.RemoveTileAsync(bandTile);
     }
     static readonly string SETTING_KEY = "id";
-    IBandClient client;
-    BandTile bandTile;
   }
 }
-
-// If we later want to remove things, we'd need to be able to
-// get to this function
-/*
-async void OnRemove(object sender, RoutedEventArgs e)
-{
-  var tileManager = await this.GetTileManagerForFirstBandAsync();
-
-  await tileManager.RemoveTileAsync(TileGuidSetting.Value);
-
-  TileGuidSetting = null;
-}
-*/

@@ -7,7 +7,7 @@
   using Windows.ApplicationModel.AppService;
   using Windows.ApplicationModel.Background;
   using Windows.Phone.Notification.Management;
-  public sealed class BackgroundTask
+  public sealed class BackgroundTask : IBackgroundTask
   {
     static readonly string BAND_OBSERVER_SERVICE_NAME = "com.microsoft.band.observer";
 

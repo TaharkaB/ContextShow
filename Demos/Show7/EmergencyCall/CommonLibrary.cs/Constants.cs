@@ -10,7 +10,7 @@
       {
         // Need to put a phone number in here.
         throw new InvalidOperationException();
-        return (string.Empty);
+        return(string.Empty);
       }
     }
   }

@@ -9,43 +9,22 @@
   <!-- for the designer -->
   <Grid
     Background="Black">
-    <Grid
-      x:Name="okGrid">
-      <Grid.RowDefinitions>
-        <RowDefinition />
-        <RowDefinition Height="Auto"/>
-      </Grid.RowDefinitions>
-      <Image
-        Margin="48"
-        Source="ms-appx:///Assets/ok.png"
-        Stretch="Uniform" />
-      <TextBlock
-        FontSize="24"
-        Text="monitoring"
-        TextAlignment="Center"
-        Grid.Row="1"
-        Margin="0,0,0,48" />
-    </Grid>
-    <Grid
-      x:Name="ringingGrid" Visibility="Collapsed">
-      <Grid.RowDefinitions>
-        <RowDefinition />
-        <RowDefinition
-          Height="Auto" />
-      </Grid.RowDefinitions>
-      <Image
-        Margin="48"
-        Source="ms-appx:///Assets/ok.png"
-        Stretch="Uniform" />
-      <TextBlock
-        FontSize="24"
-        Text="ringing"
-        TextAlignment="Center"
-        Grid.Row="1"
-        Margin="0,0,0,48" />
-      <Image
-        Margin="48"
-        Source="ms-appx:///Assets/calling.png" />
-    </Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition
+        Height="Auto" />
+    </Grid.RowDefinitions>
+    <Image
+      Margin="48"
+      Source="ms-appx:///Assets/calling.png" />
+    <Button
+      Grid.Row="1"
+      x:Name="btnRegister"
+      VerticalAlignment="Top"
+      HorizontalAlignment="Center" 
+      FontSize="24"
+      Content="Register"
+      Click="OnRegisterButtonClick"
+      Margin="96"/>
   </Grid>
 </Page>
