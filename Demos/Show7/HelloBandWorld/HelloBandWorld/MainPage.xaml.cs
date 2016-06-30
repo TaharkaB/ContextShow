@@ -111,10 +111,6 @@
       this.gridDisplay.DataContext = sensorReadings;
     }
 
-    void OnSensorReadingChanged(object sender, FormattedSensorReadingEventArgs e)
-    {
-    }
-
     string FormatAccelerometer(IBandAccelerometerReading reading) =>
       $"X:{reading.AccelerationX:F2},Y:{reading.AccelerationY:F2},Z:{reading.AccelerationZ:F2}";
 
