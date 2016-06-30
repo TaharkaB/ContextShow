@@ -1,0 +1,234 @@
+{
+  "$type": "DesignerContents",
+  "DesignerState": {
+    "$type": "DesignerState",
+    "BandLayout": {
+      "$type": "BandLayout",
+      "Version": {
+        "$type": "Version",
+        "Major": 2,
+        "Build": -1,
+        "Revision": -1
+      },
+      "BandTheme": {
+        "$type": "Theme",
+        "Base": "R: 51, G: 102, B: 204",
+        "HighContrast": "R: 58, G: 120, B: 221",
+        "Highlight": "R: 58, G: 120, B: 221",
+        "Lowlight": "R: 49, G: 101, B: 186",
+        "Muted": "R: 43, G: 90, B: 165",
+        "SecondaryText": "R: 137, G: 151, B: 171"
+      },
+      "TileTheme": {
+        "$type": "Theme",
+        "Base": "R: 51, G: 102, B: 204",
+        "HighContrast": "R: 58, G: 120, B: 221",
+        "Highlight": "R: 58, G: 120, B: 221",
+        "Lowlight": "R: 49, G: 101, B: 186",
+        "Muted": "R: 43, G: 90, B: 165",
+        "SecondaryText": "R: 137, G: 151, B: 171"
+      },
+      "RootPanel": {
+        "$type": "ScrollFlowPanel",
+        "ScrollBarColor": "R: 255, G: 255, B: 255",
+        "Elements": {
+          "$type": "Elements",
+          "$values": [
+            {
+              "$type": "FlowPanel",
+              "Elements": {
+                "$type": "Elements",
+                "$values": [
+                  {
+                    "$type": "TextBlock",
+                    "AutoWidth": true,
+                    "Color": "R: 255, G: 255, B: 255",
+                    "Text": "Coffee",
+                    "Name": "",
+                    "ElementId": 3,
+                    "Id": "dd4fb8b1-2657-4724-85f2-3bae45804cc7",
+                    "Width": 32,
+                    "Height": 32
+                  },
+                  {
+                    "$type": "TextBlock",
+                    "AutoWidth": true,
+                    "Color": "R: 255, G: 255, B: 255",
+                    "Text": "Tea",
+                    "Name": "",
+                    "ElementId": 4,
+                    "Id": "5c04b774-1cd3-46af-babb-7b7c12f1c2eb",
+                    "Width": 32,
+                    "Height": 32
+                  },
+                  {
+                    "$type": "TextBlock",
+                    "AutoWidth": true,
+                    "Color": "R: 255, G: 255, B: 255",
+                    "Text": "Beer",
+                    "Name": "",
+                    "ElementId": 5,
+                    "Id": "3c5b5e3d-61b2-4dd4-97da-7dbecd90fb58",
+                    "Width": 32,
+                    "Height": 32
+                  },
+                  {
+                    "$type": "TextBlock",
+                    "AutoWidth": true,
+                    "Color": "R: 255, G: 255, B: 255",
+                    "Text": "Wine",
+                    "Name": "",
+                    "ElementId": 6,
+                    "Id": "3858bc6e-2d31-40fd-bf78-e6a8aa7c73f5",
+                    "Width": 32,
+                    "Height": 32
+                  }
+                ]
+              },
+              "Name": "",
+              "ElementId": 2,
+              "Id": "0767df5a-f3c9-4f9e-9a19-5be3e028c032",
+              "Width": 78,
+              "Height": 128
+            },
+            {
+              "$type": "FlowPanel",
+              "Elements": {
+                "$type": "Elements",
+                "$values": [
+                  {
+                    "$type": "TextBlock",
+                    "AutoWidth": true,
+                    "ColorSource": 2,
+                    "Color": "R: 255, G: 255, B: 255",
+                    "Text": "TextBlock",
+                    "Name": "txtCoffee",
+                    "ElementId": 8,
+                    "Id": "dfa77d21-8db7-41c9-b7f7-16e69ae57b32",
+                    "Width": 32,
+                    "Height": 32
+                  },
+                  {
+                    "$type": "TextBlock",
+                    "AutoWidth": true,
+                    "ColorSource": 2,
+                    "Color": "R: 255, G: 255, B: 255",
+                    "Text": "TextBlock",
+                    "Name": "txtTea",
+                    "ElementId": 9,
+                    "Id": "e7702e30-d7fb-435f-b49e-0c109dfcf5db",
+                    "Width": 32,
+                    "Height": 32
+                  },
+                  {
+                    "$type": "TextBlock",
+                    "AutoWidth": true,
+                    "ColorSource": 2,
+                    "Color": "R: 255, G: 255, B: 255",
+                    "Text": "TextBlock",
+                    "Name": "txtBeer",
+                    "ElementId": 10,
+                    "Id": "b8bd8c59-e42f-4e48-b273-1de6a423f774",
+                    "Width": 32,
+                    "Height": 32
+                  },
+                  {
+                    "$type": "TextBlock",
+                    "AutoWidth": true,
+                    "ColorSource": 2,
+                    "Color": "R: 255, G: 255, B: 255",
+                    "Text": "TextBlock",
+                    "Name": "txtWine",
+                    "ElementId": 11,
+                    "Id": "d3c8f6c9-edef-4764-9bed-815136084954",
+                    "Width": 32,
+                    "Height": 32
+                  }
+                ]
+              },
+              "Name": "",
+              "ElementId": 7,
+              "Id": "b15bffbf-ae38-4f97-a6a3-4c3bce2bd789",
+              "Width": 47,
+              "Height": 128,
+              "LeftMargin": 86,
+              "TopMargin": -128
+            },
+            {
+              "$type": "FlowPanel",
+              "Elements": {
+                "$type": "Elements",
+                "$values": [
+                  {
+                    "$type": "TextButton",
+                    "PressedColor": "R: 32, G: 32, B: 32",
+                    "Text": "Add",
+                    "Name": "btnCoffee",
+                    "ElementId": 13,
+                    "Id": "356d0fd7-e823-472f-9471-ba19158d38b5",
+                    "Width": 90,
+                    "Height": 32,
+                    "HorizontalAlignment": 2
+                  },
+                  {
+                    "$type": "TextButton",
+                    "PressedColor": "R: 32, G: 32, B: 32",
+                    "Text": "Add",
+                    "Name": "btnTea",
+                    "ElementId": 14,
+                    "Id": "d59f7d89-50bd-496c-8c55-cf0783243d16",
+                    "Width": 90,
+                    "Height": 32,
+                    "HorizontalAlignment": 2
+                  },
+                  {
+                    "$type": "TextButton",
+                    "PressedColor": "R: 32, G: 32, B: 32",
+                    "Text": "Add",
+                    "Name": "btnBeer",
+                    "ElementId": 15,
+                    "Id": "d10c4a03-ff79-49bf-8232-96c885fc9401",
+                    "Width": 90,
+                    "Height": 32,
+                    "HorizontalAlignment": 2
+                  },
+                  {
+                    "$type": "TextButton",
+                    "PressedColor": "R: 32, G: 32, B: 32",
+                    "Text": "Add",
+                    "Name": "btnWine",
+                    "ElementId": 16,
+                    "Id": "4dd45f20-baf9-425c-a3c2-d0e98f6fcaa9",
+                    "Width": 90,
+                    "Height": 32,
+                    "HorizontalAlignment": 2
+                  }
+                ]
+              },
+              "Name": "",
+              "ElementId": 12,
+              "Id": "2fb6a436-6df8-4705-946c-ced6616a272a",
+              "Width": 90,
+              "Height": 130,
+              "LeftMargin": 157,
+              "TopMargin": -128
+            }
+          ]
+        },
+        "Name": "",
+        "ElementId": 1,
+        "Id": "f9fefcdb-ee92-478e-a280-ab1f51be4a56",
+        "Left": -1,
+        "Width": 259,
+        "Height": 128
+      }
+    },
+    "SelectedElements": {
+      "$type": "IdList",
+      "$values": [
+        "d3c8f6c9-edef-4764-9bed-815136084954"
+      ]
+    }
+  },
+  "ZoomPercent": 136.0
+}

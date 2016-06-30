@@ -1,0 +1,81 @@
+﻿<Page
+  x:Class="CoffeeTeaBeer.MainPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="using:CoffeeTeaBeer"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d">
+
+  <Grid
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <Grid
+      Margin="48">
+      <Button
+        Template="{x:Null}"
+        Click="OnUICoffeeClick">
+        <Image
+        Source="ms-appx:///Assets/coffee.png" />
+      </Button>
+      <TextBlock
+        x:Name="txtCoffee"
+        FontSize="32"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Bottom" />
+    </Grid>
+    <Grid
+      Grid.Column="1"
+      Margin="48">
+      <Button
+        Template="{x:Null}"
+        Click="OnUITeaClick">
+        <Image
+          Source="ms-appx:///Assets/tea.png" />
+      </Button>
+      <TextBlock
+        x:Name="txtTea"
+        FontSize="32"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Bottom" />
+    </Grid>
+    <Grid
+      Grid.Row="1"
+      Margin="48">
+      <Button
+        Template="{x:Null}"
+        Click="OnUIBeerClick">
+        <Image
+          Source="ms-appx:///Assets/beer.png" />
+      </Button>
+      <TextBlock
+        x:Name="txtBeer"
+        FontSize="32"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Bottom" />
+    </Grid>
+    <Grid
+      Grid.Row="1"
+      Grid.Column="1"
+      Margin="48">
+      <Button
+        Template="{x:Null}"
+        Click="OnUIWineClick">
+        <Image
+          Source="ms-appx:///Assets/wine.png" />
+      </Button>
+      <TextBlock
+        x:Name="txtWine"
+        FontSize="32"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Bottom" />
+    </Grid>
+  </Grid>
+</Page>
